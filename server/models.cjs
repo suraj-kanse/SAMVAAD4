@@ -3,10 +3,10 @@ const mongoose = require('mongoose');
 const requestSchema = new mongoose.Schema({
   studentPhone: { type: String, required: true },
   studentName: String,
-  status: { 
-    type: String, 
-    enum: ['new', 'contacted', 'scheduled', 'archived'], 
-    default: 'new' 
+  status: {
+    type: String,
+    enum: ['new', 'contacted', 'scheduled', 'archived'],
+    default: 'new'
   },
   timestamp: { type: Number, default: Date.now }
 });
@@ -37,7 +37,9 @@ const sessionSchema = new mongoose.Schema({
 const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
+  password: { type: String }, // Optional for Google Auth users
+  googleId: { type: String, unique: true, sparse: true },
+  picture: String,
   role: { type: String, enum: ['admin', 'counselor'], default: 'counselor' },
   isApproved: { type: Boolean, default: false }
 });

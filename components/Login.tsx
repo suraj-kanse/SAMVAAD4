@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Loader2, Lock, Mail, ArrowLeft, ArrowRight, ShieldCheck } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { GoogleLogin } from '@react-oauth/google';
 import { login } from '../services/auth';
 import { User } from '../types';
 
@@ -194,6 +195,45 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess, onBack, onSignupCl
               )}
             </button>
           </motion.form>
+
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-slate-200 dark:border-slate-700"></div>
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-2 bg-slate-50 dark:bg-slate-950 text-slate-500">Or continue with</span>
+            </div>
+          </div>
+
+          <div className="flex justify-center">
+            <GoogleLogin
+              onSuccess={async (credentialResponse) => {
+                try {
+                  setLoading(true);
+                  const res = await fetch('http://localhost:5000/api/auth/google', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token: credentialResponse.credential }),
+                  });
+                  const data = await res.json();
+                  setLoading(false);
+                  if (res.ok) {
+                    localStorage.setItem('samvaad_user', JSON.stringify(data));
+                    onLoginSuccess(data);
+                  } else {
+                    setError(data.error || 'Google Login Failed');
+                  }
+                } catch (err) {
+                  setLoading(false);
+                  setError('Network Error');
+                }
+              }}
+              onError={() => {
+                setError('Google Login Failed');
+              }}
+              useOneTap
+            />
+          </div>
 
           <motion.div
             initial={{ opacity: 0 }}

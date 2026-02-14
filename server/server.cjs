@@ -147,6 +147,48 @@ app.post('/api/auth/register', async (req, res) => {
   }
 });
 
+// Google Auth
+const { OAuth2Client } = require('google-auth-library');
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
+app.post('/api/auth/google', async (req, res) => {
+  try {
+    const { token } = req.body;
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: process.env.GOOGLE_CLIENT_ID
+    });
+    const { name, email, picture, sub: googleId } = ticket.getPayload();
+
+    let user = await User.findOne({ email });
+
+    if (!user) {
+      // Create new user if not exists
+      user = new User({
+        name,
+        email,
+        googleId,
+        picture,
+        role: 'counselor', // Default role
+        isApproved: false // Needs admin approval
+      });
+      await user.save();
+    } else if (!user.googleId) {
+      // Link Google ID to existing account
+      user.googleId = googleId;
+      user.picture = picture;
+      await user.save();
+    }
+
+    if (!user.isApproved) return res.status(403).json({ error: 'Account pending approval' });
+
+    res.json(mapId(user));
+  } catch (e) {
+    console.error("Google Auth Error:", e);
+    res.status(401).json({ error: 'Google authentication failed' });
+  }
+});
+
 // Users (Admin)
 app.get('/api/users', async (req, res) => {
   try {

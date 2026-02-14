@@ -92,6 +92,19 @@ async function runTests() {
             throw new Error('Counselor login failed after approval');
         }
 
+        // 6. Test Google Auth Endpoint (Availability Check)
+        console.log('\n6️⃣  Testing Google Auth Endpoint (Expect 401)...');
+        try {
+            await axios.post(`${API_URL}/auth/google`, { token: 'fake_token' });
+            throw new Error('Should have failed with 401');
+        } catch (err) {
+            if (err.response && err.response.status === 401) {
+                console.log('✅ Google Auth Endpoint is active (Correctly rejected fake token)');
+            } else {
+                throw new Error(`Google Auth Endpoint returned unexpected status: ${err.response ? err.response.status : err.message}`);
+            }
+        }
+
         console.log('\n✨ ALL AUTHENTICATION TESTS PASSED ✨');
 
     } catch (error) {
