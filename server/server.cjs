@@ -84,7 +84,11 @@ const connectDB = async () => {
   }
 };
 
-connectDB();
+connectDB().then(() => {
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+});
 
 // Helper to map _id to id
 const mapId = (doc) => {
@@ -243,6 +247,3 @@ app.post('/api/sessions', async (req, res) => {
 });
 
 // Bind to 0.0.0.0 to ensure access from external containers/VMs if needed
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Server running on port ${PORT}`);
-});
