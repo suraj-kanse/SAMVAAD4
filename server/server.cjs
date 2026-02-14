@@ -71,7 +71,6 @@ const connectDB = async () => {
     if (!MONGO_URI) {
       console.warn("⚠️  NOTE: MONGO_URI not found in .env file.");
       console.warn("   Attempting to connect to local MongoDB (mongodb://127.0.0.1:27017/samvaad)");
-      console.warn("   To use MongoDB Atlas, create a .env file with: MONGO_URI='mongodb+srv://<user>:<pass>@cluster.mongodb.net/...'");
     }
 
     await mongoose.connect(connectionString, options);
@@ -80,15 +79,21 @@ const connectDB = async () => {
     seedAdmin();
   } catch (err) {
     console.error('❌ MongoDB Connection Error:', err.message);
-    console.log('   Server running in OFFLINE MODE (Data will not be saved permanently)');
+    // CRITICAL: Throw error so the server doesn't start in a broken state
+    throw err;
   }
 };
 
-connectDB().then(() => {
-  app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Server running on port ${PORT}`);
+connectDB()
+  .then(() => {
+    app.listen(PORT, '0.0.0.0', () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error('❌ Server failed to start due to DB connection error.');
+    process.exit(1);
   });
-});
 
 // Helper to map _id to id
 const mapId = (doc) => {
