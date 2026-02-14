@@ -14,6 +14,10 @@ import { User } from './types';
 type ViewState = 'landing' | 'login' | 'signup' | 'dashboard' | 'about' | 'counselor';
 type Theme = 'light' | 'dark';
 
+import { GoogleOAuthProvider } from '@react-oauth/google';
+
+const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || "588187807226-rn5cb4vgdcugbs6u7nhdhuueqf82pkg9.apps.googleusercontent.com";
+
 function App() {
   const [view, setView] = useState<ViewState>('landing');
   const [user, setUser] = useState<User | null>(null);
@@ -82,78 +86,80 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 font-sans transition-colors duration-300">
-      {view === 'landing' && (
-        <LandingPage
-          onLoginClick={() => setView('login')}
-          onAboutClick={() => setView('about')}
-          onMeetCounselorClick={() => setView('counselor')}
-          isDark={theme === 'dark'}
-          onThemeToggle={toggleTheme}
-        />
-      )}
+    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 font-sans transition-colors duration-300">
+        {view === 'landing' && (
+          <LandingPage
+            onLoginClick={() => setView('login')}
+            onAboutClick={() => setView('about')}
+            onMeetCounselorClick={() => setView('counselor')}
+            isDark={theme === 'dark'}
+            onThemeToggle={toggleTheme}
+          />
+        )}
 
-      {view === 'about' && (
-        <AboutPage
-          onHomeClick={() => setView('landing')}
-          onMeetCounselorClick={() => setView('counselor')}
-          onLoginClick={() => setView('login')}
-          isDark={theme === 'dark'}
-          onThemeToggle={toggleTheme}
-        />
-      )}
+        {view === 'about' && (
+          <AboutPage
+            onHomeClick={() => setView('landing')}
+            onMeetCounselorClick={() => setView('counselor')}
+            onLoginClick={() => setView('login')}
+            isDark={theme === 'dark'}
+            onThemeToggle={toggleTheme}
+          />
+        )}
 
-      {view === 'counselor' && (
-        <CounselorPage
-          onHomeClick={() => setView('landing')}
-          onAboutClick={() => setView('about')}
-          onLoginClick={() => setView('login')}
-          isDark={theme === 'dark'}
-          onThemeToggle={toggleTheme}
-        />
-      )}
+        {view === 'counselor' && (
+          <CounselorPage
+            onHomeClick={() => setView('landing')}
+            onAboutClick={() => setView('about')}
+            onLoginClick={() => setView('login')}
+            isDark={theme === 'dark'}
+            onThemeToggle={toggleTheme}
+          />
+        )}
 
-      {view === 'login' && (
-        <Login
-          onLoginSuccess={handleLoginSuccess}
-          onBack={() => setView('landing')}
-          onSignupClick={() => setView('signup')}
-        />
-      )}
+        {view === 'login' && (
+          <Login
+            onLoginSuccess={handleLoginSuccess}
+            onBack={() => setView('landing')}
+            onSignupClick={() => setView('signup')}
+          />
+        )}
 
-      {view === 'signup' && (
-        <Signup onBack={() => setView('login')} />
-      )}
+        {view === 'signup' && (
+          <Signup onBack={() => setView('login')} />
+        )}
 
-      {view === 'dashboard' && user && (
-        <DashboardLayout
-          user={user}
-          currentView={dashboardView}
-          onNavigate={handleDashboardNavigate}
-          onLogout={handleLogout}
-          isDark={theme === 'dark'}
-          onThemeToggle={toggleTheme}
-        >
-          {dashboardView === 'home' && <ActionCenter />}
+        {view === 'dashboard' && user && (
+          <DashboardLayout
+            user={user}
+            currentView={dashboardView}
+            onNavigate={handleDashboardNavigate}
+            onLogout={handleLogout}
+            isDark={theme === 'dark'}
+            onThemeToggle={toggleTheme}
+          >
+            {dashboardView === 'home' && <ActionCenter />}
 
-          {dashboardView === 'students' && !selectedStudentId && (
-            <StudentRepository onSelectStudent={navigateToStudent} />
-          )}
+            {dashboardView === 'students' && !selectedStudentId && (
+              <StudentRepository onSelectStudent={navigateToStudent} />
+            )}
 
-          {dashboardView === 'students' && selectedStudentId && (
-            <StudentDetail
-              studentId={selectedStudentId}
-              currentUser={user}
-              onBack={() => setSelectedStudentId(null)}
-            />
-          )}
+            {dashboardView === 'students' && selectedStudentId && (
+              <StudentDetail
+                studentId={selectedStudentId}
+                currentUser={user}
+                onBack={() => setSelectedStudentId(null)}
+              />
+            )}
 
-          {dashboardView === 'admin' && user.role === 'admin' && (
-            <AdminPanel />
-          )}
-        </DashboardLayout>
-      )}
-    </div>
+            {dashboardView === 'admin' && user.role === 'admin' && (
+              <AdminPanel />
+            )}
+          </DashboardLayout>
+        )}
+      </div>
+    </GoogleOAuthProvider>
   );
 }
 
