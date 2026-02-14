@@ -62,13 +62,19 @@ const connectDB = async () => {
     // Priority: Env Variable (Atlas) -> Localhost Fallback
     const connectionString = MONGO_URI || 'mongodb://127.0.0.1:27017/samvaad';
 
+    // Add timeouts to fail fast if network is blocked
+    const options = {
+      serverSelectionTimeoutMS: 5000,
+      socketTimeoutMS: 45000,
+    };
+
     if (!MONGO_URI) {
       console.warn("⚠️  NOTE: MONGO_URI not found in .env file.");
       console.warn("   Attempting to connect to local MongoDB (mongodb://127.0.0.1:27017/samvaad)");
       console.warn("   To use MongoDB Atlas, create a .env file with: MONGO_URI='mongodb+srv://<user>:<pass>@cluster.mongodb.net/...'");
     }
 
-    await mongoose.connect(connectionString);
+    await mongoose.connect(connectionString, options);
 
     console.log(`✅ MongoDB Connected: ${mongoose.connection.host}`);
     seedAdmin();
