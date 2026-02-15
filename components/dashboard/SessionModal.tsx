@@ -30,6 +30,8 @@ export const SessionModal: React.FC<SessionModalProps> = ({ studentId, onClose, 
     const newSession: Session = {
       id: '', // Backend will generate ID
       studentId,
+      // counselorId, // Removed
+      // counselorName, // Removed
       topics: selectedTopics,
       reason,
       description,

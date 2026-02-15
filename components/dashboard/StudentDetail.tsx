@@ -180,6 +180,9 @@ export const StudentDetail: React.FC<StudentDetailProps> = ({ studentId, onBack 
                                     )}
 
                                     <div className="mt-3 pt-3 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center text-xs text-slate-400">
+                                        <span className="flex items-center gap-1">
+                                            <UserIcon className="w-3 h-3" /> Staff
+                                        </span>
                                         {session.attachmentUrl && (
                                             <span className="flex items-center gap-1 text-teal-600 dark:text-teal-400 font-medium cursor-pointer hover:underline">
                                                 <FileText className="w-3 h-3" /> Attachment

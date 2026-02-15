@@ -6,6 +6,7 @@ export type DashboardView = 'home' | 'students';
 interface DashboardLayoutProps {
   currentView: DashboardView;
   onNavigate: (view: DashboardView) => void;
+  onLogout: () => void;
   children: React.ReactNode;
   isDark: boolean;
   onThemeToggle: () => void;
@@ -14,10 +15,16 @@ interface DashboardLayoutProps {
 export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   currentView,
   onNavigate,
+  onLogout,
   children,
   isDark,
   onThemeToggle
 }) => {
+
+  const handleLogoutClick = () => {
+    localStorage.removeItem('samvaad_user');
+    onLogout();
+  };
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col transition-colors duration-300">
@@ -63,6 +70,14 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
               aria-label="Toggle Theme"
             >
               {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+            </button>
+            <div className="h-6 w-px bg-slate-200 dark:bg-slate-700 mx-1"></div>
+            <button
+              onClick={handleLogoutClick}
+              className="p-2 text-slate-500 hover:text-red-600 dark:text-slate-400 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+              title="Logout"
+            >
+              <LogOut className="w-5 h-5" />
             </button>
           </div>
         </div>
