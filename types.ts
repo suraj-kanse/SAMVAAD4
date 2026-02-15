@@ -13,14 +13,6 @@ export interface StudentRequest {
   timestamp: number;
 }
 
-export interface User {
-  id: string;
-  name: string;
-  email: string;
-  role: 'admin' | 'counselor';
-  isApproved: boolean;
-}
-
 export interface Student {
   id: string;
   fullName: string;
@@ -36,8 +28,6 @@ export interface Student {
 export interface Session {
   id: string;
   studentId: string;
-  counselorId: string;
-  counselorName: string;
   topics: string[];
   reason: string;
   description: string;

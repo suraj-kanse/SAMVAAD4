@@ -4,15 +4,13 @@ import { Session } from '../../types';
 
 interface SessionModalProps {
   studentId: string;
-  counselorId: string;
-  counselorName: string;
   onClose: () => void;
   onSave: (session: Session) => Promise<void>;
 }
 
 const TOPICS = ["Exam Stress", "Family Issues", "Relationship", "Career Anxiety", "Depression", "Homesickness", "Substance Abuse", "Other"];
 
-export const SessionModal: React.FC<SessionModalProps> = ({ studentId, counselorId, counselorName, onClose, onSave }) => {
+export const SessionModal: React.FC<SessionModalProps> = ({ studentId, onClose, onSave }) => {
   const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
   const [reason, setReason] = useState('');
   const [description, setDescription] = useState('');
@@ -20,7 +18,7 @@ export const SessionModal: React.FC<SessionModalProps> = ({ studentId, counselor
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const toggleTopic = (topic: string) => {
-    setSelectedTopics(prev => 
+    setSelectedTopics(prev =>
       prev.includes(topic) ? prev.filter(t => t !== topic) : [...prev, topic]
     );
   };
@@ -32,8 +30,6 @@ export const SessionModal: React.FC<SessionModalProps> = ({ studentId, counselor
     const newSession: Session = {
       id: '', // Backend will generate ID
       studentId,
-      counselorId,
-      counselorName,
       topics: selectedTopics,
       reason,
       description,
@@ -57,7 +53,7 @@ export const SessionModal: React.FC<SessionModalProps> = ({ studentId, counselor
         </div>
 
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
-          
+
           {/* Topics */}
           <div>
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Topics Discussed</label>
@@ -67,11 +63,10 @@ export const SessionModal: React.FC<SessionModalProps> = ({ studentId, counselor
                   key={topic}
                   type="button"
                   onClick={() => toggleTopic(topic)}
-                  className={`px-3 py-1.5 rounded-full text-sm font-medium border transition-colors ${
-                    selectedTopics.includes(topic)
-                      ? 'bg-teal-50 dark:bg-teal-900/30 border-teal-200 dark:border-teal-700 text-teal-700 dark:text-teal-300'
-                      : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-teal-200 dark:hover:border-teal-700'
-                  }`}
+                  className={`px-3 py-1.5 rounded-full text-sm font-medium border transition-colors ${selectedTopics.includes(topic)
+                    ? 'bg-teal-50 dark:bg-teal-900/30 border-teal-200 dark:border-teal-700 text-teal-700 dark:text-teal-300'
+                    : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-teal-200 dark:hover:border-teal-700'
+                    }`}
                 >
                   {topic}
                 </button>
@@ -82,8 +77,8 @@ export const SessionModal: React.FC<SessionModalProps> = ({ studentId, counselor
           {/* Reason */}
           <div>
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Reason for Consulting</label>
-            <input 
-              type="text" 
+            <input
+              type="text"
               required
               value={reason}
               onChange={(e) => setReason(e.target.value)}
@@ -95,7 +90,7 @@ export const SessionModal: React.FC<SessionModalProps> = ({ studentId, counselor
           {/* Description */}
           <div>
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Detailed Description</label>
-            <textarea 
+            <textarea
               rows={4}
               required
               value={description}
@@ -110,7 +105,7 @@ export const SessionModal: React.FC<SessionModalProps> = ({ studentId, counselor
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
               Private Note <span className="text-slate-400 font-normal">(Only visible to counselors)</span>
             </label>
-            <textarea 
+            <textarea
               rows={2}
               value={privateNote}
               onChange={(e) => setPrivateNote(e.target.value)}
@@ -121,12 +116,12 @@ export const SessionModal: React.FC<SessionModalProps> = ({ studentId, counselor
 
           {/* Attachment (Mock) */}
           <div>
-             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Attachments</label>
-             <div className="border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-xl p-6 text-center hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors cursor-pointer">
-                <Upload className="w-8 h-8 text-slate-300 dark:text-slate-600 mx-auto mb-2" />
-                <p className="text-sm text-slate-500 dark:text-slate-400">Click to upload handwritten notes or PDFs</p>
-                <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">(Feature simulated for prototype)</p>
-             </div>
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Attachments</label>
+            <div className="border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-xl p-6 text-center hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors cursor-pointer">
+              <Upload className="w-8 h-8 text-slate-300 dark:text-slate-600 mx-auto mb-2" />
+              <p className="text-sm text-slate-500 dark:text-slate-400">Click to upload handwritten notes or PDFs</p>
+              <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">(Feature simulated for prototype)</p>
+            </div>
           </div>
 
           <div className="flex gap-4 pt-4 border-t border-slate-100 dark:border-slate-800">

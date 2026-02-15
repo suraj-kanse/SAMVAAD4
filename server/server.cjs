@@ -2,10 +2,9 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const bcrypt = require('bcryptjs');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
-const { Request, Student, Session, User } = require('./models.cjs');
+const { Request, Student, Session } = require('./models.cjs');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -27,32 +26,6 @@ const limiter = rateLimit({
   legacyHeaders: false,
 });
 app.use(limiter);
-
-// --- SEED ADMIN FUNCTION ---
-const seedAdmin = async () => {
-  const adminEmail = process.env.ADMIN_EMAIL || 'dev@avcoe.edu';
-  const adminPass = process.env.ADMIN_PASS || 'admin123';
-
-  try {
-    const exists = await User.findOne({ email: adminEmail });
-    if (!exists) {
-      console.log(`Seeding Admin Account: ${adminEmail}`);
-      const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash(adminPass, salt);
-
-      await User.create({
-        name: 'Developer Admin',
-        email: adminEmail,
-        password: hashedPassword,
-        role: 'admin',
-        isApproved: true
-      });
-      console.log('Admin seeded successfully.');
-    }
-  } catch (err) {
-    console.error("Seeding Error (DB might be disconnected):", err.message);
-  }
-};
 
 // --- DATABASE CONNECTION ---
 const connectDB = async () => {
@@ -76,7 +49,6 @@ const connectDB = async () => {
     await mongoose.connect(connectionString, options);
 
     console.log(`✅ MongoDB Connected: ${mongoose.connection.host}`);
-    seedAdmin();
   } catch (err) {
     console.error('❌ MongoDB Connection Error:', err.message);
     // CRITICAL: Throw error so the server doesn't start in a broken state
@@ -102,112 +74,10 @@ const mapId = (doc) => {
   obj.id = obj._id.toString();
   delete obj._id;
   delete obj.__v;
-  delete obj.password;
   return obj;
 };
 
 // --- ROUTES ---
-
-// Auth
-app.post('/api/auth/login', async (req, res) => {
-  try {
-    const { email, password } = req.body;
-    const user = await User.findOne({ email });
-
-    if (!user) return res.status(401).json({ error: 'Invalid credentials' });
-
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(401).json({ error: 'Invalid credentials' });
-
-    if (!user.isApproved) return res.status(403).json({ error: 'Account pending approval' });
-
-    res.json(mapId(user));
-  } catch (e) {
-    res.status(500).json({ error: e.message });
-  }
-});
-
-app.post('/api/auth/register', async (req, res) => {
-  try {
-    const exists = await User.findOne({ email: req.body.email });
-    if (exists) return res.status(400).json({ error: 'Email already registered' });
-
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(req.body.password, salt);
-
-    const newUser = new User({
-      ...req.body,
-      password: hashedPassword
-    });
-
-    await newUser.save();
-    res.json({ success: true });
-  } catch (e) {
-    res.status(500).json({ error: e.message });
-  }
-});
-
-// Google Auth
-const { OAuth2Client } = require('google-auth-library');
-const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
-
-app.post('/api/auth/google', async (req, res) => {
-  try {
-    const { token } = req.body;
-    const ticket = await client.verifyIdToken({
-      idToken: token,
-      audience: process.env.GOOGLE_CLIENT_ID
-    });
-    const { name, email, picture, sub: googleId } = ticket.getPayload();
-
-    let user = await User.findOne({ email });
-
-    if (!user) {
-      // Create new user if not exists
-      user = new User({
-        name,
-        email,
-        googleId,
-        picture,
-        role: 'counselor', // Default role
-        isApproved: false // Needs admin approval
-      });
-      await user.save();
-    } else if (!user.googleId) {
-      // Link Google ID to existing account
-      user.googleId = googleId;
-      user.picture = picture;
-      await user.save();
-    }
-
-    if (!user.isApproved) return res.status(403).json({ error: 'Account pending approval' });
-
-    res.json(mapId(user));
-  } catch (e) {
-    console.error("Google Auth Error:", e);
-    res.status(401).json({ error: 'Google authentication failed' });
-  }
-});
-
-// Users (Admin)
-app.get('/api/users', async (req, res) => {
-  try {
-    const users = await User.find();
-    res.json(users.map(mapId));
-  } catch (e) {
-    res.status(500).json({ error: e.message });
-  }
-});
-
-app.patch('/api/users/:id/status', async (req, res) => {
-  try {
-    const { isApproved } = req.body;
-    await User.findByIdAndUpdate(req.params.id, { isApproved });
-    res.json({ success: true });
-  } catch (e) {
-    res.status(500).json({ error: e.message });
-  }
-});
 
 // Requests
 app.get('/api/requests', async (req, res) => {
