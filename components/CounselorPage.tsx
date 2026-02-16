@@ -36,7 +36,7 @@ export const CounselorPage: React.FC<CounselorPageProps> = ({
                     <div className="w-full md:w-1/3 flex flex-col items-center">
                         <div className="w-64 h-64 rounded-[2rem] overflow-hidden shadow-xl border-4 border-white dark:border-stone-800 mb-6 relative group bg-stone-200 dark:bg-stone-800">
                             <img
-                                src="/images/counselor.jpg"
+                                src="/images/counselor.svg"
                                 alt="Dr. Maya Patil"
                                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                             />
