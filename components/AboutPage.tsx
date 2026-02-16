@@ -8,7 +8,7 @@ import { Navbar } from './Navbar';
 interface AboutPageProps {
     onHomeClick: () => void;
     onMeetCounselorClick: () => void;
-    onLoginClick: () => void;
+
     isDark: boolean;
     onThemeToggle: () => void;
 }
@@ -67,7 +67,7 @@ const NOT_LIST = [
 export const AboutPage: React.FC<AboutPageProps> = ({
     onHomeClick,
     onMeetCounselorClick,
-    onLoginClick,
+
     isDark,
     onThemeToggle
 }) => {
@@ -90,7 +90,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({
                 onHomeClick={onHomeClick}
                 onAboutClick={() => { }} // Already on About page
                 onMeetCounselorClick={onMeetCounselorClick}
-                onLoginClick={onLoginClick}
+
                 isDark={isDark}
                 onThemeToggle={onThemeToggle}
                 activePage="about"
@@ -106,7 +106,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({
                     </div>
                     <h2 className="text-3xl md:text-4xl font-bold text-stone-900 dark:text-white mb-6">Why This Platform Exists ?</h2>
                     <p className="text-lg text-stone-500 dark:text-stone-400 max-w-3xl mx-auto leading-relaxed">
-                        This service was built for Amrutvahini College of Engineering with a simple belief: accessing support should be as easy as scanning a QR code.
+                        This service was built for Amrutvahini College of Engineering Students and Staffs with a simple belief: accessing support should be as easy as scanning a QR code.
                     </p>
                 </div>
 

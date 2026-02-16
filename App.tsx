@@ -54,7 +54,7 @@ function App() {
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 font-sans transition-colors duration-300">
       {view === 'landing' && (
         <LandingPage
-          onLoginClick={() => setView('dashboard')}
+
           onAboutClick={() => setView('about')}
           onMeetCounselorClick={() => setView('counselor')}
           isDark={theme === 'dark'}
@@ -66,7 +66,7 @@ function App() {
         <AboutPage
           onHomeClick={() => setView('landing')}
           onMeetCounselorClick={() => setView('counselor')}
-          onLoginClick={() => setView('dashboard')}
+
           isDark={theme === 'dark'}
           onThemeToggle={toggleTheme}
         />
@@ -76,7 +76,7 @@ function App() {
         <CounselorPage
           onHomeClick={() => setView('landing')}
           onAboutClick={() => setView('about')}
-          onLoginClick={() => setView('dashboard')}
+
           isDark={theme === 'dark'}
           onThemeToggle={toggleTheme}
         />

@@ -1,11 +1,11 @@
 import React from 'react';
-import { Award, BookHeart, GraduationCap, Quote, User, Lock, FileX, Shield } from 'lucide-react';
+import { Award, BookHeart, GraduationCap, Quote, Lock, FileX, Shield } from 'lucide-react';
 import { Navbar } from './Navbar';
 
 interface CounselorPageProps {
     onHomeClick: () => void;
     onAboutClick: () => void;
-    onLoginClick: () => void;
+
     isDark: boolean;
     onThemeToggle: () => void;
 }
@@ -13,7 +13,7 @@ interface CounselorPageProps {
 export const CounselorPage: React.FC<CounselorPageProps> = ({
     onHomeClick,
     onAboutClick,
-    onLoginClick,
+
     isDark,
     onThemeToggle
 }) => {
@@ -24,7 +24,7 @@ export const CounselorPage: React.FC<CounselorPageProps> = ({
                 onHomeClick={onHomeClick}
                 onAboutClick={onAboutClick}
                 onMeetCounselorClick={() => { }} // Already on Counselor page
-                onLoginClick={onLoginClick}
+
                 isDark={isDark}
                 onThemeToggle={onThemeToggle}
                 activePage="counselor"
@@ -166,24 +166,7 @@ export const CounselorPage: React.FC<CounselorPageProps> = ({
 
             </main>
 
-            {/* Counselor Login Section at Bottom */}
-            <section className="bg-white dark:bg-[#1f201f] border-t border-stone-200 dark:border-stone-800 py-16 mt-12 transition-colors duration-300">
-                <div className="max-w-xl mx-auto px-4 text-center">
-                    <div className="w-16 h-16 bg-stone-100 dark:bg-stone-800 rounded-full flex items-center justify-center mx-auto mb-6 text-stone-400 dark:text-stone-500">
-                        <User className="w-8 h-8" />
-                    </div>
-                    <h2 className="text-2xl font-bold text-stone-900 dark:text-white mb-3">Counselor Access</h2>
-                    <p className="text-stone-500 dark:text-stone-400 mb-8 max-w-sm mx-auto">
-                        Are you a staff member? Log in to the secure portal.
-                    </p>
-                    <button
-                        onClick={onLoginClick}
-                        className="inline-flex items-center justify-center gap-2 px-8 py-3 bg-stone-900 dark:bg-white text-white dark:text-stone-900 rounded-xl font-semibold hover:bg-stone-800 dark:hover:bg-stone-200 transition-colors shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all"
-                    >
-                        Login to Portal
-                    </button>
-                </div>
-            </section>
+
         </div>
     );
 };
