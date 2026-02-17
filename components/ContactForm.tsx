@@ -22,28 +22,29 @@ export const ContactForm: React.FC = () => {
     setIsSubmitting(true);
 
     try {
-      // Log request to mock DB
+      // 1. Log request to mock DB (keep existing logic)
       await saveRequest(phone, name);
 
-      // Construct WhatsApp Message
-      const message = `Hello, I would like to connect with a counselor.\n\nMy Details:\nName: ${name || 'Not provided'}\nPhone: ${phone}`;
-      const encodedMessage = encodeURIComponent(message);
-      const whatsappUrl = `https://wa.me/918698801090?text=${encodedMessage}`;
+      // 2. Send details to Counselor via Backend API
+      const response = await fetch('http://localhost:5000/api/whatsapp/send', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ phone, name }),
+      });
 
-      // Open WhatsApp
-      window.open(whatsappUrl, '_blank');
+      if (!response.ok) {
+        throw new Error('Failed to send message');
+      }
 
+      // 3. Show Success Message (No Redirect)
       setIsSuccess(true);
       setPhone('');
       setName('');
     } catch (err) {
       console.error(err);
-      // Even if DB fails, still try to open WhatsApp
-      const message = `Hello, I would like to connect with a counselor.\n\nMy Details:\nName: ${name || 'Not provided'}\nPhone: ${phone}`;
-      const encodedMessage = encodeURIComponent(message);
-      const whatsappUrl = `https://wa.me/918698801090?text=${encodedMessage}`;
-      window.open(whatsappUrl, '_blank');
-      setIsSuccess(true);
+      setError("Something went wrong. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -57,9 +58,9 @@ export const ContactForm: React.FC = () => {
             <CheckCircle2 className="w-16 h-16 text-teal-600 dark:text-teal-400" />
           </div>
         </div>
-        <h3 className="text-2xl font-bold text-teal-900 dark:text-teal-100 mb-3">We hear you.</h3>
+        <h3 className="text-2xl font-bold text-teal-900 dark:text-teal-100 mb-3">Thank you</h3>
         <p className="text-stone-600 dark:text-stone-300 mb-8 max-w-xs mx-auto leading-relaxed">
-          Reaching out takes courage. A counselor has been notified and will reach out to you discreetly via WhatsApp soon.
+          We will surely contact you As soon as Possible.
         </p>
         <button
           onClick={() => setIsSuccess(false)}

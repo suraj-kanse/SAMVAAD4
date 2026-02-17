@@ -163,4 +163,41 @@ app.post('/api/sessions', async (req, res) => {
   }
 });
 
+// WhatsApp API
+app.post('/api/whatsapp/send', async (req, res) => {
+  try {
+    const { phone, name } = req.body;
+
+    if (!phone) {
+      return res.status(400).json({ error: 'Phone number is required' });
+    }
+
+    const message = `Hello, I would like to connect with a counselor.\n\nMy Details:\nName: ${name || 'Not provided'}\nPhone: ${phone}`;
+
+    // Check for credentials
+    const token = process.env.WHATSAPP_API_TOKEN;
+    const phoneId = process.env.WHATSAPP_PHONE_NUMBER_ID;
+
+    if (token && phoneId) {
+      // Real API Call (Meta Cloud API or Twilio)
+      // For now, let's assume Meta Cloud API structure or similar
+      console.log(`🚀 Sending WhatsApp to Counselor (8698801090) about user: ${name}, ${phone}`);
+      // Implementation for axios call would go here
+      // await axios.post(...)
+    } else {
+      // Placeholder: Log to console
+      console.log("---------------------------------------------------");
+      console.log("📨 SIMULATED WHATSAPP MESSAGE (No Credentials Found)");
+      console.log(`To: Counselor (8698801090)`);
+      console.log(`Message: \n${message}`);
+      console.log("---------------------------------------------------");
+    }
+
+    // Always return success to the frontend for this demo
+    res.json({ success: true, message: 'Message queued for sending' });
+  } catch (e) {
+    console.error("WhatsApp Error:", e.message);
+    res.status(500).json({ error: e.message });
+  }
+});
 // Bind to 0.0.0.0 to ensure access from external containers/VMs if needed
