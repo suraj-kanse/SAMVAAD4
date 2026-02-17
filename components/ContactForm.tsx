@@ -28,7 +28,7 @@ export const ContactForm: React.FC = () => {
       // Construct WhatsApp Message
       const message = `Hello, I would like to connect with a counselor.\n\nMy Details:\nName: ${name || 'Not provided'}\nPhone: ${phone}`;
       const encodedMessage = encodeURIComponent(message);
-      const whatsappUrl = `https://wa.me/918010777641?text=${encodedMessage}`;
+      const whatsappUrl = `https://wa.me/918698801090?text=${encodedMessage}`;
 
       // Open WhatsApp
       window.open(whatsappUrl, '_blank');
@@ -41,7 +41,7 @@ export const ContactForm: React.FC = () => {
       // Even if DB fails, still try to open WhatsApp
       const message = `Hello, I would like to connect with a counselor.\n\nMy Details:\nName: ${name || 'Not provided'}\nPhone: ${phone}`;
       const encodedMessage = encodeURIComponent(message);
-      const whatsappUrl = `https://wa.me/918010777641?text=${encodedMessage}`;
+      const whatsappUrl = `https://wa.me/918698801090?text=${encodedMessage}`;
       window.open(whatsappUrl, '_blank');
       setIsSuccess(true);
     } finally {

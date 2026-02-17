@@ -52,7 +52,7 @@ export const CounselorPage: React.FC<CounselorPageProps> = ({
 
                             <div className="mt-8 w-full">
                                 <a
-                                    href="https://wa.me/918010777641?text=Hello,%20I%20would%20like%20to%20speak%20with%20a%20student%20counsellor."
+                                    href="https://wa.me/918698801090?text=Hello,%20I%20would%20like%20to%20speak%20with%20a%20student%20counsellor."
                                     target="_blank"
                                     rel="noreferrer"
                                     className="w-full py-3 px-6 bg-[#4a8067] hover:bg-[#3d6b56] text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all hover:-translate-y-0.5 flex items-center justify-center gap-2 group"
