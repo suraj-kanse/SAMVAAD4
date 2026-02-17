@@ -1,5 +1,5 @@
 import React from 'react';
-import { Award, BookHeart, GraduationCap, Quote, Lock, FileX, Shield } from 'lucide-react';
+import { Award, BookHeart, GraduationCap, Quote, Lock, FileX, Shield, MessageCircle } from 'lucide-react';
 import { Navbar } from './Navbar';
 
 interface CounselorPageProps {
@@ -48,6 +48,18 @@ export const CounselorPage: React.FC<CounselorPageProps> = ({
                             <div className="flex flex-wrap gap-2 justify-center">
                                 <span className="px-3 py-1 bg-white dark:bg-[#252525] border border-stone-200 dark:border-stone-800 text-stone-600 dark:text-stone-300 text-xs rounded-full font-medium">M.A. Clinical Psychology</span>
                                 <span className="px-3 py-1 bg-white dark:bg-[#252525] border border-stone-200 dark:border-stone-800 text-stone-600 dark:text-stone-300 text-xs rounded-full font-medium">Child & Adolescent Psychology</span>
+                            </div>
+
+                            <div className="mt-8 w-full">
+                                <a
+                                    href="https://wa.me/918010777641?text=Hello,%20I%20would%20like%20to%20speak%20with%20a%20student%20counsellor."
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="w-full py-3 px-6 bg-[#4a8067] hover:bg-[#3d6b56] text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all hover:-translate-y-0.5 flex items-center justify-center gap-2 group"
+                                >
+                                    <MessageCircle className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                                    Talk to Counselor
+                                </a>
                             </div>
                         </div>
                     </div>

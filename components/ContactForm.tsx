@@ -20,18 +20,30 @@ export const ContactForm: React.FC = () => {
     }
 
     setIsSubmitting(true);
-    
+
     try {
-      const success = await saveRequest(phone, name);
-      if (success) {
-        setIsSuccess(true);
-        setPhone('');
-        setName('');
-      } else {
-        setError("Something went wrong. Please try again.");
-      }
+      // Log request to mock DB
+      await saveRequest(phone, name);
+
+      // Construct WhatsApp Message
+      const message = `Hello, I would like to connect with a counselor.\n\nMy Details:\nName: ${name || 'Not provided'}\nPhone: ${phone}`;
+      const encodedMessage = encodeURIComponent(message);
+      const whatsappUrl = `https://wa.me/918010777641?text=${encodedMessage}`;
+
+      // Open WhatsApp
+      window.open(whatsappUrl, '_blank');
+
+      setIsSuccess(true);
+      setPhone('');
+      setName('');
     } catch (err) {
-      setError("Network error. Check your connection.");
+      console.error(err);
+      // Even if DB fails, still try to open WhatsApp
+      const message = `Hello, I would like to connect with a counselor.\n\nMy Details:\nName: ${name || 'Not provided'}\nPhone: ${phone}`;
+      const encodedMessage = encodeURIComponent(message);
+      const whatsappUrl = `https://wa.me/918010777641?text=${encodedMessage}`;
+      window.open(whatsappUrl, '_blank');
+      setIsSuccess(true);
     } finally {
       setIsSubmitting(false);
     }
@@ -49,7 +61,7 @@ export const ContactForm: React.FC = () => {
         <p className="text-stone-600 dark:text-stone-300 mb-8 max-w-xs mx-auto leading-relaxed">
           Reaching out takes courage. A counselor has been notified and will reach out to you discreetly via WhatsApp soon.
         </p>
-        <button 
+        <button
           onClick={() => setIsSuccess(false)}
           className="text-teal-600 dark:text-teal-400 font-semibold hover:text-teal-800 dark:hover:text-teal-200 hover:underline transition-colors"
         >
@@ -93,7 +105,7 @@ export const ContactForm: React.FC = () => {
             Name <span className="text-stone-400 font-normal">(Optional)</span>
           </label>
           <div className="relative">
-             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <User className="h-5 w-5 text-stone-400" />
             </div>
             <input
