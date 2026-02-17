@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { Send, CheckCircle2, Loader2, Smartphone, User } from 'lucide-react';
 import { saveRequest } from '../services/mockDb';
 
+// Use same env variable pattern as mockDb.ts
+const BASE_URL = (import.meta as any).env?.VITE_API_URL || 'http://localhost:5000';
+
 export const ContactForm: React.FC = () => {
   const [phone, setPhone] = useState('');
   const [name, setName] = useState('');
@@ -22,11 +25,13 @@ export const ContactForm: React.FC = () => {
     setIsSubmitting(true);
 
     try {
-      // 1. Log request to mock DB (keep existing logic)
-      await saveRequest(phone, name);
+      // 1. Log request to mock DB (non-blocking — don't fail if DB is down)
+      saveRequest(phone, name).catch((err) => {
+        console.warn('DB save failed (non-critical):', err.message);
+      });
 
       // 2. Send details to Counselor via Backend API
-      const response = await fetch('http://localhost:5000/api/whatsapp/send', {
+      const response = await fetch(`${BASE_URL}/api/whatsapp/send`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
