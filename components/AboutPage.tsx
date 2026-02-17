@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-    Terminal, Shield, MessageCircle, Heart, Github, Linkedin,
+    Shield, MessageCircle, Heart, Github, Linkedin,
     Sparkles, Lock, Eye, Server, X, Code, Send, CheckCircle2, Mail
 } from 'lucide-react';
 import { Navbar } from './Navbar';
@@ -13,26 +13,7 @@ interface AboutPageProps {
     onThemeToggle: () => void;
 }
 
-const DEVS = [
-    {
-        name: "Soham Parikh",
-        role: "Full Stack Engineer",
-        image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Soham&backgroundColor=b6e3f4",
-        bio: "Passionate about building scalable web applications and solving real-world problems through code."
-    },
-    {
-        name: "Aditi Rao",
-        role: "UI/UX Designer",
-        image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Aditi&backgroundColor=c0aede",
-        bio: "Believes that great design is invisible. Focused on creating intuitive and accessible user experiences."
-    },
-    {
-        name: "Rahul Verma",
-        role: "Backend Developer",
-        image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Rahul&backgroundColor=ffdfbf",
-        bio: "Ensuring the system runs smoothly and securely. Loves optimizing database queries and API performance."
-    }
-];
+
 
 const PRINCIPLES = [
     {
@@ -188,43 +169,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({
                     </div>
                 </div>
 
-                {/* Developers Section */}
-                <div className="border-t border-stone-200 dark:border-stone-800 pt-20 mb-20">
-                    <div className="text-center mb-12">
-                        <div className="inline-flex items-center justify-center p-3 bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-400 rounded-2xl mb-6">
-                            <Terminal className="w-6 h-6" />
-                        </div>
-                        <h2 className="text-3xl font-bold text-stone-900 dark:text-white mb-4">Meet the Builders</h2>
-                        <p className="text-stone-500 dark:text-stone-400 max-w-xl mx-auto">
-                            A group of students dedicated to making mental health support accessible through technology.
-                        </p>
-                    </div>
 
-                    <div className="grid md:grid-cols-3 gap-6">
-                        {DEVS.map((dev, idx) => (
-                            <div key={idx} className="bg-white dark:bg-[#252525] rounded-3xl shadow-sm border border-stone-200 dark:border-stone-800 p-6 flex flex-col items-center text-center hover:shadow-lg transition-all duration-300 group">
-                                <div className="w-24 h-24 rounded-full bg-stone-100 dark:bg-stone-800 mb-5 overflow-hidden border-4 border-white dark:border-[#252525] shadow-sm group-hover:scale-105 transition-transform">
-                                    <img src={dev.image} alt={dev.name} className="w-full h-full object-cover" />
-                                </div>
-                                <h3 className="text-lg font-bold text-stone-900 dark:text-white mb-1">{dev.name}</h3>
-                                <span className="inline-block px-3 py-1 rounded-full bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-400 font-medium text-xs mb-4">
-                                    {dev.role}
-                                </span>
-                                <p className="text-stone-500 dark:text-stone-400 text-sm mb-6 leading-relaxed opacity-80">
-                                    {dev.bio}
-                                </p>
-                                <div className="flex gap-3 mt-auto">
-                                    <button className="p-2 rounded-full bg-stone-50 dark:bg-stone-800 text-stone-400 hover:text-stone-900 dark:hover:text-white transition-all">
-                                        <Github className="w-4 h-4" />
-                                    </button>
-                                    <button className="p-2 rounded-full bg-stone-50 dark:bg-stone-800 text-stone-400 hover:text-blue-600 dark:hover:text-blue-400 transition-all">
-                                        <Linkedin className="w-4 h-4" />
-                                    </button>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
 
                 {/* Built With Care */}
                 <div className="mb-24 bg-white dark:bg-[#252525] rounded-[2rem] border border-stone-200 dark:border-stone-800 p-8 md:p-12 flex flex-col md:flex-row gap-10 items-start">
