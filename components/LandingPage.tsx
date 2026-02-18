@@ -13,6 +13,8 @@ interface LandingPageProps {
 
     onAboutClick: () => void;
     onMeetCounselorClick: () => void;
+    onCounselorLoginClick: () => void;
+    onAdminLoginClick: () => void;
     isDark: boolean;
     onThemeToggle: () => void;
 }
@@ -21,6 +23,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
     onAboutClick,
     onMeetCounselorClick,
+    onCounselorLoginClick,
+    onAdminLoginClick,
     isDark,
     onThemeToggle
 }) => {
@@ -35,6 +39,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                 onHomeClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                 onAboutClick={onAboutClick}
                 onMeetCounselorClick={onMeetCounselorClick}
+                onCounselorLoginClick={onCounselorLoginClick}
+                onAdminLoginClick={onAdminLoginClick}
                 isDark={isDark}
                 onThemeToggle={onThemeToggle}
                 activePage="home"

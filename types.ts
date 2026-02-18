@@ -35,3 +35,23 @@ export interface Session {
   attachmentUrl?: string; // Mock URL for visual demo
   date: number;
 }
+
+// --- Auth Types ---
+export type UserRole = 'admin' | 'counselor';
+export type UserStatus = 'pending' | 'approved' | 'blocked';
+
+export interface AuthUser {
+  id: string;
+  email: string;
+  name: string;
+  role: UserRole;
+  status: UserStatus;
+}
+
+export interface Counselor {
+  id: string;
+  email: string;
+  name: string;
+  status: UserStatus;
+  createdAt: string;
+}

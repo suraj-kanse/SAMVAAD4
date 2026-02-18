@@ -1,8 +1,18 @@
-import { StudentRequest, RequestStatus, Student, Session } from '../types';
+import { StudentRequest, RequestStatus, Student, Session, AuthUser, Counselor } from '../types';
 
 // Use environment variable if available, otherwise fallback to localhost for local dev
 const BASE_URL = (import.meta as any).env?.VITE_API_URL || 'http://localhost:5000';
 const API_URL = `${BASE_URL}/api`;
+
+// --- TOKEN MANAGEMENT ---
+const TOKEN_KEY = 'samvaad_token';
+
+export const getToken = (): string | null => localStorage.getItem(TOKEN_KEY);
+export const setToken = (token: string): void => localStorage.setItem(TOKEN_KEY, token);
+export const clearToken = (): void => {
+  localStorage.removeItem(TOKEN_KEY);
+  localStorage.removeItem('samvaad_user');
+};
 
 // --- MOCK DATA STORE (Offline Fallback) ---
 // These arrays serve as a temporary database when the backend is unreachable.
@@ -24,10 +34,19 @@ const isOfflineError = (error: any): boolean => {
     error.name === 'TypeError';
 };
 
-const fetchApi = async <T>(endpoint: string, options?: RequestInit): Promise<T> => {
+const fetchApi = async <T>(endpoint: string, options?: RequestInit, includeAuth: boolean = true): Promise<T> => {
   try {
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+
+    if (includeAuth) {
+      const token = getToken();
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+    }
+
     const res = await fetch(`${API_URL}${endpoint}`, {
-      headers: { 'Content-Type': 'application/json' },
+      headers,
       ...options,
     });
     if (!res.ok) {
@@ -45,7 +64,55 @@ const fetchApi = async <T>(endpoint: string, options?: RequestInit): Promise<T> 
   }
 };
 
-// --- REQUESTS ---
+// ============================================================
+// AUTH API
+// ============================================================
+
+export const login = async (email: string, password: string): Promise<{ token: string; user: AuthUser }> => {
+  const result = await fetchApi<{ token: string; user: AuthUser }>('/auth/login', {
+    method: 'POST',
+    body: JSON.stringify({ email, password })
+  }, false);
+
+  setToken(result.token);
+  localStorage.setItem('samvaad_user', JSON.stringify(result.user));
+  return result;
+};
+
+export const register = async (name: string, email: string, password: string): Promise<{ message: string; status: string }> => {
+  return fetchApi<{ message: string; status: string }>('/auth/register', {
+    method: 'POST',
+    body: JSON.stringify({ name, email, password })
+  }, false);
+};
+
+export const getMe = async (): Promise<AuthUser> => {
+  return fetchApi<AuthUser>('/auth/me');
+};
+
+export const logout = (): void => {
+  clearToken();
+};
+
+// ============================================================
+// ADMIN API
+// ============================================================
+
+export const getCounselors = async (): Promise<Counselor[]> => {
+  return fetchApi<Counselor[]>('/admin/counselors');
+};
+
+export const updateCounselorStatus = async (id: string, status: string): Promise<Counselor> => {
+  return fetchApi<Counselor>(`/admin/counselors/${id}`, {
+    method: 'PATCH',
+    body: JSON.stringify({ status })
+  });
+};
+
+// ============================================================
+// REQUESTS (Contact form POST is public, GET/PATCH need auth)
+// ============================================================
+
 export const getRequests = async (): Promise<StudentRequest[]> => {
   try {
     return await fetchApi<StudentRequest[]>('/requests');
@@ -60,6 +127,7 @@ export const getRequests = async (): Promise<StudentRequest[]> => {
 
 export const saveRequest = async (phone: string, name?: string): Promise<boolean> => {
   try {
+    // Contact form submission is PUBLIC — no auth required
     await fetchApi('/requests', {
       method: 'POST',
       body: JSON.stringify({
@@ -68,7 +136,7 @@ export const saveRequest = async (phone: string, name?: string): Promise<boolean
         status: RequestStatus.NEW,
         timestamp: Date.now()
       })
-    });
+    }, false);
     return true;
   } catch (e: any) {
     if (isOfflineError(e)) {
@@ -102,7 +170,10 @@ export const updateRequestStatus = async (id: string, status: RequestStatus): Pr
   }
 };
 
-// --- STUDENTS ---
+// ============================================================
+// STUDENTS (All protected)
+// ============================================================
+
 export const getStudents = async (): Promise<Student[]> => {
   try {
     return await fetchApi<Student[]>('/students');
@@ -143,7 +214,10 @@ export const addStudent = async (student: Student): Promise<boolean> => {
   }
 };
 
-// --- SESSIONS ---
+// ============================================================
+// SESSIONS (All protected)
+// ============================================================
+
 export const getSessionsByStudentId = async (studentId: string): Promise<Session[]> => {
   try {
     return await fetchApi<Session[]>(`/sessions?studentId=${studentId}`);

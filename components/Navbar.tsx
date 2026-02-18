@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Sun, Moon, Menu, X } from 'lucide-react';
+import { Sun, Moon, Menu, X, LogIn } from 'lucide-react';
 
 interface NavbarProps {
   onHomeClick: () => void;
   onAboutClick: () => void;
   onMeetCounselorClick: () => void;
-
+  onCounselorLoginClick?: () => void;
+  onAdminLoginClick?: () => void;
   isDark: boolean;
   onThemeToggle: () => void;
   activePage: 'home' | 'about' | 'counselor';
@@ -15,7 +16,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   onHomeClick,
   onAboutClick,
   onMeetCounselorClick,
-
+  onCounselorLoginClick,
+  onAdminLoginClick,
   isDark,
   onThemeToggle,
   activePage
@@ -74,6 +76,30 @@ export const Navbar: React.FC<NavbarProps> = ({
               About
             </button>
 
+            {/* Login Links (Mobile) */}
+            {(onCounselorLoginClick || onAdminLoginClick) && (
+              <>
+                <div className="h-px bg-stone-200 dark:bg-stone-700 my-2"></div>
+                {onCounselorLoginClick && (
+                  <button
+                    onClick={() => handleNav(onCounselorLoginClick)}
+                    className="p-4 text-left text-lg font-medium rounded-xl hover:bg-teal-50 dark:hover:bg-teal-900/20 text-teal-600 dark:text-teal-400 flex items-center gap-2 transition-colors"
+                  >
+                    <LogIn className="w-5 h-5" />
+                    Counselor Login
+                  </button>
+                )}
+                {onAdminLoginClick && (
+                  <button
+                    onClick={() => handleNav(onAdminLoginClick)}
+                    className="p-4 text-left text-lg font-medium rounded-xl hover:bg-violet-50 dark:hover:bg-violet-900/20 text-violet-600 dark:text-violet-400 flex items-center gap-2 transition-colors"
+                  >
+                    <LogIn className="w-5 h-5" />
+                    Admin Login
+                  </button>
+                )}
+              </>
+            )}
           </nav>
         </div>
       )}
@@ -102,6 +128,33 @@ export const Navbar: React.FC<NavbarProps> = ({
           >
             About
           </button>
+
+          {/* Login Links (Desktop) */}
+          {(onCounselorLoginClick || onAdminLoginClick) && (
+            <>
+              <div className="w-px h-4 bg-stone-300 dark:bg-white/10 mx-1"></div>
+
+              {onCounselorLoginClick && (
+                <button
+                  onClick={onCounselorLoginClick}
+                  className="px-4 py-2.5 rounded-full font-medium text-sm text-teal-600 dark:text-teal-400 hover:bg-teal-50 dark:hover:bg-teal-900/20 transition-colors flex items-center gap-1.5"
+                >
+                  <LogIn className="w-3.5 h-3.5" />
+                  Login
+                </button>
+              )}
+
+              {onAdminLoginClick && (
+                <button
+                  onClick={onAdminLoginClick}
+                  className="px-3 py-2 rounded-full text-xs text-stone-400 dark:text-stone-500 hover:text-violet-600 dark:hover:text-violet-400 hover:bg-violet-50 dark:hover:bg-violet-900/20 transition-colors"
+                  title="Admin Login"
+                >
+                  Admin
+                </button>
+              )}
+            </>
+          )}
 
           <div className="w-px h-4 bg-stone-300 dark:bg-white/10 mx-1"></div>
 

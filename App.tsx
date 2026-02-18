@@ -6,8 +6,23 @@ import { StudentRepository } from './components/dashboard/StudentRepository';
 import { StudentDetail } from './components/dashboard/StudentDetail';
 import { AboutPage } from './components/AboutPage';
 import { CounselorPage } from './components/CounselorPage';
+import { LoginPage } from './components/LoginPage';
+import { RegisterPage } from './components/RegisterPage';
+import { PendingApproval } from './components/PendingApproval';
+import { AdminDashboard } from './components/admin/AdminDashboard';
+import { getMe, getToken, logout } from './services/mockDb';
+import { AuthUser } from './types';
 
-type ViewState = 'landing' | 'dashboard' | 'about' | 'counselor';
+type ViewState =
+  | 'landing'
+  | 'about'
+  | 'counselor'
+  | 'counselor-login'
+  | 'counselor-register'
+  | 'counselor-dashboard'
+  | 'admin-login'
+  | 'admin-dashboard';
+
 type Theme = 'light' | 'dark';
 
 function App() {
@@ -18,6 +33,10 @@ function App() {
     }
     return 'light';
   });
+
+  // Auth state
+  const [authUser, setAuthUser] = useState<AuthUser | null>(null);
+  const [isAuthLoading, setIsAuthLoading] = useState(true);
 
   // Dashboard routing state
   const [dashboardView, setDashboardView] = useState<DashboardView>('home');
@@ -37,6 +56,42 @@ function App() {
     window.scrollTo(0, 0);
   }, [view]);
 
+  // Restore auth session on app load
+  useEffect(() => {
+    const restoreSession = async () => {
+      const token = getToken();
+      if (!token) {
+        setIsAuthLoading(false);
+        return;
+      }
+
+      try {
+        const user = await getMe();
+        setAuthUser(user);
+
+        // Auto-navigate to appropriate dashboard
+        if (user.role === 'admin') {
+          setView('admin-dashboard');
+        } else if (user.role === 'counselor') {
+          if (user.status === 'approved') {
+            setView('counselor-dashboard');
+          } else {
+            // pending or blocked — handled in render
+            setView('counselor-dashboard');
+          }
+        }
+      } catch {
+        // Token invalid/expired — clear it
+        logout();
+        setAuthUser(null);
+      } finally {
+        setIsAuthLoading(false);
+      }
+    };
+
+    restoreSession();
+  }, []);
+
   const toggleTheme = () => {
     setTheme(prev => prev === 'light' ? 'dark' : 'light');
   };
@@ -47,16 +102,46 @@ function App() {
 
   const handleDashboardNavigate = (view: DashboardView) => {
     setDashboardView(view);
-    setSelectedStudentId(null); // Reset detail view when changing tabs
+    setSelectedStudentId(null);
   };
+
+  const handleLoginSuccess = (user: AuthUser) => {
+    setAuthUser(user);
+    if (user.role === 'admin') {
+      setView('admin-dashboard');
+    } else if (user.role === 'counselor') {
+      if (user.status === 'approved') {
+        setView('counselor-dashboard');
+      } else {
+        setView('counselor-dashboard'); // will show PendingApproval
+      }
+    }
+  };
+
+  const handleLogout = () => {
+    logout();
+    setAuthUser(null);
+    setView('landing');
+  };
+
+  // Show loading while restoring session
+  if (isAuthLoading) {
+    return (
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex items-center justify-center transition-colors duration-300">
+        <div className="w-8 h-8 border-4 border-teal-600 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 font-sans transition-colors duration-300">
+      {/* Public Pages */}
       {view === 'landing' && (
         <LandingPage
-
           onAboutClick={() => setView('about')}
           onMeetCounselorClick={() => setView('counselor')}
+          onCounselorLoginClick={() => setView('counselor-login')}
+          onAdminLoginClick={() => setView('admin-login')}
           isDark={theme === 'dark'}
           onThemeToggle={toggleTheme}
         />
@@ -66,7 +151,8 @@ function App() {
         <AboutPage
           onHomeClick={() => setView('landing')}
           onMeetCounselorClick={() => setView('counselor')}
-
+          onCounselorLoginClick={() => setView('counselor-login')}
+          onAdminLoginClick={() => setView('admin-login')}
           isDark={theme === 'dark'}
           onThemeToggle={toggleTheme}
         />
@@ -76,33 +162,85 @@ function App() {
         <CounselorPage
           onHomeClick={() => setView('landing')}
           onAboutClick={() => setView('about')}
-
+          onCounselorLoginClick={() => setView('counselor-login')}
+          onAdminLoginClick={() => setView('admin-login')}
           isDark={theme === 'dark'}
           onThemeToggle={toggleTheme}
         />
       )}
 
-      {view === 'dashboard' && (
-        <DashboardLayout
-          currentView={dashboardView}
-          onNavigate={handleDashboardNavigate}
-          onLogout={() => setView('landing')}
+      {/* Auth Pages */}
+      {view === 'counselor-login' && (
+        <LoginPage
+          role="counselor"
+          onLoginSuccess={handleLoginSuccess}
+          onBack={() => setView('landing')}
+          onRegisterClick={() => setView('counselor-register')}
+          isDark={theme === 'dark'}
+        />
+      )}
+
+      {view === 'counselor-register' && (
+        <RegisterPage
+          onBack={() => setView('landing')}
+          onLoginClick={() => setView('counselor-login')}
+          isDark={theme === 'dark'}
+        />
+      )}
+
+      {view === 'admin-login' && (
+        <LoginPage
+          role="admin"
+          onLoginSuccess={handleLoginSuccess}
+          onBack={() => setView('landing')}
+          isDark={theme === 'dark'}
+        />
+      )}
+
+      {/* Counselor Dashboard (with auth guard) */}
+      {view === 'counselor-dashboard' && authUser?.role === 'counselor' && (
+        <>
+          {authUser.status !== 'approved' ? (
+            <PendingApproval
+              status={authUser.status}
+              userName={authUser.name}
+              onBack={() => setView('landing')}
+              onLogout={handleLogout}
+            />
+          ) : (
+            <DashboardLayout
+              currentView={dashboardView}
+              onNavigate={handleDashboardNavigate}
+              onLogout={handleLogout}
+              isDark={theme === 'dark'}
+              onThemeToggle={toggleTheme}
+            >
+              {dashboardView === 'home' && <ActionCenter />}
+
+              {dashboardView === 'students' && !selectedStudentId && (
+                <StudentRepository onSelectStudent={navigateToStudent} />
+              )}
+
+              {dashboardView === 'students' && selectedStudentId && (
+                <StudentDetail
+                  studentId={selectedStudentId}
+                  onBack={() => setSelectedStudentId(null)}
+                />
+              )}
+            </DashboardLayout>
+          )}
+        </>
+      )}
+
+      {/* Admin Dashboard (with auth guard) */}
+      {view === 'admin-dashboard' && authUser?.role === 'admin' && (
+        <AdminDashboard
+          adminName={authUser.name}
+          onLogout={handleLogout}
+          onBack={() => setView('landing')}
           isDark={theme === 'dark'}
           onThemeToggle={toggleTheme}
-        >
-          {dashboardView === 'home' && <ActionCenter />}
-
-          {dashboardView === 'students' && !selectedStudentId && (
-            <StudentRepository onSelectStudent={navigateToStudent} />
-          )}
-
-          {dashboardView === 'students' && selectedStudentId && (
-            <StudentDetail
-              studentId={selectedStudentId}
-              onBack={() => setSelectedStudentId(null)}
-            />
-          )}
-        </DashboardLayout>
+        />
       )}
     </div>
   );
