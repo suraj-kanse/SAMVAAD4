@@ -22,7 +22,6 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 }) => {
 
   const handleLogoutClick = () => {
-    localStorage.removeItem('samvaad_user');
     onLogout();
   };
 
@@ -43,8 +42,8 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
               <button
                 onClick={() => onNavigate('home')}
                 className={`px-3 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors ${currentView === 'home'
-                    ? 'bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white'
-                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800'
+                  ? 'bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white'
+                  : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800'
                   }`}
               >
                 <LayoutDashboard className="w-4 h-4" />
@@ -53,8 +52,8 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
               <button
                 onClick={() => onNavigate('students')}
                 className={`px-3 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors ${currentView === 'students'
-                    ? 'bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white'
-                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800'
+                  ? 'bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white'
+                  : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800'
                   }`}
               >
                 <Users className="w-4 h-4" />
