@@ -8,8 +8,6 @@ import { Navbar } from './Navbar';
 interface AboutPageProps {
     onHomeClick: () => void;
     onMeetCounselorClick: () => void;
-    onCounselorLoginClick: () => void;
-    onAdminLoginClick: () => void;
     isDark: boolean;
     onThemeToggle: () => void;
 }
@@ -49,8 +47,6 @@ const NOT_LIST = [
 export const AboutPage: React.FC<AboutPageProps> = ({
     onHomeClick,
     onMeetCounselorClick,
-    onCounselorLoginClick,
-    onAdminLoginClick,
     isDark,
     onThemeToggle
 }) => {
@@ -73,8 +69,6 @@ export const AboutPage: React.FC<AboutPageProps> = ({
                 onHomeClick={onHomeClick}
                 onAboutClick={() => { }} // Already on About page
                 onMeetCounselorClick={onMeetCounselorClick}
-                onCounselorLoginClick={onCounselorLoginClick}
-                onAdminLoginClick={onAdminLoginClick}
                 isDark={isDark}
                 onThemeToggle={onThemeToggle}
                 activePage="about"

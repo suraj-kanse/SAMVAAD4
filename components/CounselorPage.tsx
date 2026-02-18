@@ -5,8 +5,6 @@ import { Navbar } from './Navbar';
 interface CounselorPageProps {
     onHomeClick: () => void;
     onAboutClick: () => void;
-    onCounselorLoginClick: () => void;
-    onAdminLoginClick: () => void;
     isDark: boolean;
     onThemeToggle: () => void;
 }
@@ -14,8 +12,6 @@ interface CounselorPageProps {
 export const CounselorPage: React.FC<CounselorPageProps> = ({
     onHomeClick,
     onAboutClick,
-    onCounselorLoginClick,
-    onAdminLoginClick,
     isDark,
     onThemeToggle
 }) => {
@@ -26,8 +22,6 @@ export const CounselorPage: React.FC<CounselorPageProps> = ({
                 onHomeClick={onHomeClick}
                 onAboutClick={onAboutClick}
                 onMeetCounselorClick={() => { }} // Already on Counselor page
-                onCounselorLoginClick={onCounselorLoginClick}
-                onAdminLoginClick={onAdminLoginClick}
                 isDark={isDark}
                 onThemeToggle={onThemeToggle}
                 activePage="counselor"

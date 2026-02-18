@@ -26,7 +26,15 @@ type ViewState =
 type Theme = 'light' | 'dark';
 
 function App() {
-  const [view, setView] = useState<ViewState>('landing');
+  // Read initial view from URL hash (e.g. #counselor-login, #admin-login)
+  const getViewFromHash = (): ViewState => {
+    const hash = window.location.hash.replace('#', '');
+    const validViews: ViewState[] = ['counselor-login', 'counselor-register', 'admin-login'];
+    if (validViews.includes(hash as ViewState)) return hash as ViewState;
+    return 'landing';
+  };
+
+  const [view, setView] = useState<ViewState>(getViewFromHash);
   const [theme, setTheme] = useState<Theme>(() => {
     if (typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
       return 'dark';
@@ -50,6 +58,30 @@ function App() {
       document.documentElement.classList.remove('dark');
     }
   }, [theme]);
+
+  // Sync view with URL hash
+  useEffect(() => {
+    // Update hash when view changes
+    const authViews = ['counselor-login', 'counselor-register', 'admin-login'];
+    if (authViews.includes(view)) {
+      window.location.hash = view;
+    } else {
+      // Clear hash for non-auth views
+      if (window.location.hash) {
+        history.replaceState(null, '', window.location.pathname);
+      }
+    }
+  }, [view]);
+
+  // Listen for hash changes (browser back/forward)
+  useEffect(() => {
+    const handleHashChange = () => {
+      const newView = getViewFromHash();
+      setView(newView);
+    };
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
 
   // Scroll to top on view change
   useEffect(() => {
@@ -140,8 +172,6 @@ function App() {
         <LandingPage
           onAboutClick={() => setView('about')}
           onMeetCounselorClick={() => setView('counselor')}
-          onCounselorLoginClick={() => setView('counselor-login')}
-          onAdminLoginClick={() => setView('admin-login')}
           isDark={theme === 'dark'}
           onThemeToggle={toggleTheme}
         />
@@ -151,8 +181,6 @@ function App() {
         <AboutPage
           onHomeClick={() => setView('landing')}
           onMeetCounselorClick={() => setView('counselor')}
-          onCounselorLoginClick={() => setView('counselor-login')}
-          onAdminLoginClick={() => setView('admin-login')}
           isDark={theme === 'dark'}
           onThemeToggle={toggleTheme}
         />
@@ -162,8 +190,6 @@ function App() {
         <CounselorPage
           onHomeClick={() => setView('landing')}
           onAboutClick={() => setView('about')}
-          onCounselorLoginClick={() => setView('counselor-login')}
-          onAdminLoginClick={() => setView('admin-login')}
           isDark={theme === 'dark'}
           onThemeToggle={toggleTheme}
         />
