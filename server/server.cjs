@@ -403,4 +403,12 @@ app.post('/api/whatsapp/send', async (req, res) => {
     res.status(500).json({ error: e.message });
   }
 });
-// Bind to 0.0.0.0 to ensure access from external containers/VMs if needed
+// --- START SERVER ---
+connectDB().then(() => {
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}).catch(err => {
+  console.error('Failed to start server:', err.message);
+  process.exit(1);
+});
