@@ -67,6 +67,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({
 
             <main className="max-w-4xl mx-auto px-4 pt-28 pb-20 animate-fade-in">
 
+
                 {/* Why This Platform Exists */}
                 <div className="text-center mb-24">
                     <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#e3f0e8] dark:bg-[#1f3a2e] text-[#2c5f46] dark:text-[#7abfa1] text-sm font-medium mb-6">
@@ -74,20 +75,16 @@ export const AboutPage: React.FC<AboutPageProps> = ({
                         <span>The Story Behind the Platform</span>
                     </div>
                     <h2 className="text-3xl md:text-4xl font-bold text-stone-900 dark:text-white mb-6">Why This Platform Exists ?</h2>
-                    <p className="text-lg text-stone-500 dark:text-stone-400 max-w-3xl mx-auto leading-relaxed">
-                        This service was built for Amrutvahini College of Engineering Students and Staffs with a simple belief: accessing support should be as easy as scanning a QR code.
+                    <p className="text-lg text-stone-500 dark:text-stone-400 max-w-3xl mx-auto leading-relaxed mb-4">
+                        This service was built for Amrutvahini College of Engineering Students and Staff with a simple belief: accessing support should be as easy as scanning a QR code.
                     </p>
-                </div>
-
-                {/* Mission Section */}
-                <div className="text-center mb-16 md:mb-20">
-                    <h1 className="text-3xl md:text-5xl font-bold text-stone-900 dark:text-white mb-6 tracking-tight">
+                    <p className="text-lg text-stone-500 dark:text-stone-400 max-w-2xl mx-auto leading-relaxed mb-10 font-light">
+                        This platform was built to remove the friction from seeking help. Mental health support should be accessible and simple.
+                    </p>
+                    <h1 className="text-3xl md:text-5xl font-bold text-stone-900 dark:text-white tracking-tight">
                         Bridging the gap between <br className="hidden md:block" />
                         <span className="text-[#4a8067] dark:text-[#6ccca2]">students and support</span>
                     </h1>
-                    <p className="text-lg md:text-xl text-stone-500 dark:text-stone-400 max-w-2xl mx-auto leading-relaxed font-light">
-                        This platform was built to remove the friction from seeking help. Mental health support should be accessible and simple.
-                    </p>
                 </div>
 
                 {/* Features Grid */}
@@ -96,9 +93,9 @@ export const AboutPage: React.FC<AboutPageProps> = ({
                         <div className="w-12 h-12 bg-blue-50 dark:bg-blue-900/20 rounded-2xl flex items-center justify-center text-blue-600 dark:text-blue-400 mb-4">
                             <Shield className="w-6 h-6" />
                         </div>
-                        <h3 className="text-lg font-bold text-stone-800 dark:text-white mb-2">Implicit Consent</h3>
+                        <h3 className="text-lg font-bold text-stone-800 dark:text-white mb-2">100% Confidential</h3>
                         <p className="text-stone-500 dark:text-stone-400 text-sm leading-relaxed">
-                            By initiating contact, we bypass complex consent forms. Reaching out is the consent.
+                            Your conversations stay between you and the counselor. Nothing goes on your academic record. Ever.
                         </p>
                     </div>
                     <div className="bg-white dark:bg-[#252525] p-8 rounded-3xl border border-stone-100 dark:border-stone-800 shadow-sm">
@@ -226,7 +223,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({
                     onMeetCounselorClick={onMeetCounselorClick}
                 />
 
-            </main>
-        </div>
+            </main >
+        </div >
     );
 };
