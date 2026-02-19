@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Send, CheckCircle2, Loader2, Smartphone, User, Building2 } from 'lucide-react';
 import { saveRequest } from '../services/mockDb';
 
-// Use same env variable pattern as mockDb.ts
-const BASE_URL = (import.meta as any).env?.VITE_API_URL || 'http://localhost:5000';
+// Use relative URLs so it works on both local dev and deployment
+const BASE_URL = (import.meta as any).env?.VITE_API_URL || '';
 
 export const ContactForm: React.FC = () => {
   const [phone, setPhone] = useState('');
@@ -182,8 +182,8 @@ export const ContactForm: React.FC = () => {
           type="submit"
           disabled={isSubmitting || !isPhoneValid}
           className={`relative overflow-hidden w-full flex items-center justify-center py-4 px-6 border border-transparent rounded-xl shadow-lg text-white font-semibold text-lg transition-all disabled:cursor-not-allowed group ${isPhoneValid
-              ? 'bg-green-600 hover:bg-green-700 focus:ring-2 focus:ring-offset-2 focus:ring-green-600 hover:-translate-y-0.5'
-              : 'bg-stone-400 dark:bg-stone-600 cursor-not-allowed opacity-70'
+            ? 'bg-green-600 hover:bg-green-700 focus:ring-2 focus:ring-offset-2 focus:ring-green-600 hover:-translate-y-0.5'
+            : 'bg-stone-400 dark:bg-stone-600 cursor-not-allowed opacity-70'
             }`}
         >
           {isPhoneValid && (

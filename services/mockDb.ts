@@ -1,7 +1,7 @@
 import { StudentRequest, RequestStatus, Student, Session, AuthUser, Counselor } from '../types';
 
-// Use environment variable if available, otherwise fallback to localhost for local dev
-const BASE_URL = (import.meta as any).env?.VITE_API_URL || 'http://localhost:5000';
+// Use relative URLs so it works on both local dev and deployment
+const BASE_URL = (import.meta as any).env?.VITE_API_URL || '';
 const API_URL = `${BASE_URL}/api`;
 
 // --- TOKEN MANAGEMENT ---

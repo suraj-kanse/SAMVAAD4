@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const path = require('path');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const helmet = require('helmet');
@@ -59,16 +60,7 @@ const connectDB = async () => {
   }
 };
 
-connectDB()
-  .then(() => {
-    app.listen(PORT, '0.0.0.0', () => {
-      console.log(`Server running on port ${PORT}`);
-    });
-  })
-  .catch((err) => {
-    console.error('❌ Server failed to start due to DB connection error.');
-    process.exit(1);
-  });
+// (Server started at the bottom of this file)
 
 // Helper to map _id to id
 const mapId = (doc) => {
@@ -403,6 +395,17 @@ app.post('/api/whatsapp/send', async (req, res) => {
     res.status(500).json({ error: e.message });
   }
 });
+
+// --- SERVE FRONTEND (Production) ---
+// Serve the built React app from the dist/ folder
+const distPath = path.join(__dirname, '..', 'dist');
+app.use(express.static(distPath));
+
+// SPA catch-all: any route that isn't /api/* gets index.html
+app.get('*', (req, res) => {
+  res.sendFile(path.join(distPath, 'index.html'));
+});
+
 // --- START SERVER ---
 connectDB().then(() => {
   app.listen(PORT, '0.0.0.0', () => {
