@@ -66,7 +66,7 @@ export const CounselorPage: React.FC<CounselorPageProps> = ({
                         <div className="bg-white dark:bg-[#252525] p-8 rounded-3xl border border-stone-100 dark:border-stone-800 shadow-sm relative">
                             <Quote className="absolute top-8 left-6 w-8 h-8 text-[#dbece4] dark:text-[#2c3e34] -z-0" />
                             <p className="text-lg text-stone-600 dark:text-stone-300 leading-relaxed relative z-10 italic pl-6">
-                                "My goal is to create a safe harbor for students. College life is transformative but can also be turbulent. I'm here not to judge or instruct, but to listen and help you find your own strength."
+                                "My goal is to create a space where students feel truly safe. College life is exciting and transformative, but it can also feel overwhelming. I'm here to listen — without judgment — and help you discover your own strength."
                             </p>
                         </div>
 
@@ -76,7 +76,7 @@ export const CounselorPage: React.FC<CounselorPageProps> = ({
                                 My Methodology
                             </h3>
                             <p className="text-stone-600 dark:text-stone-400 leading-relaxed">
-                                I believe in a holistic, student-centered approach. Whether you are dealing with academic pressure, relationship issues, or just need someone to talk to, our sessions are strictly confidential and tailored to your pace. I combine cognitive behavioral techniques with mindfulness to help manage stress and anxiety effectively.
+                                I believe in an approach that sees you as a whole person — not just a problem to solve. Whether it's academic pressure, relationship struggles, or simply needing someone to talk to, our sessions are completely confidential and move at your pace. I use practical, evidence-based techniques — including mindfulness — to help you manage stress and build resilience.
                             </p>
                         </div>
 
