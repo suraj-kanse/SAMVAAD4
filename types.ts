@@ -9,6 +9,8 @@ export interface StudentRequest {
   id: string;
   studentPhone: string;
   studentName?: string;
+  department?: string;
+  gender?: string;
   status: RequestStatus;
   timestamp: number;
 }

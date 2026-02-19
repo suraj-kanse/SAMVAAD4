@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const requestSchema = new mongoose.Schema({
   studentPhone: { type: String, required: true },
   studentName: String,
+  department: String,
+  gender: String,
   status: {
     type: String,
     enum: ['new', 'contacted', 'scheduled', 'archived'],

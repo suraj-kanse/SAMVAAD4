@@ -125,7 +125,7 @@ export const getRequests = async (): Promise<StudentRequest[]> => {
   }
 };
 
-export const saveRequest = async (phone: string, name?: string): Promise<boolean> => {
+export const saveRequest = async (phone: string, name?: string, department?: string, gender?: string): Promise<boolean> => {
   try {
     // Contact form submission is PUBLIC — no auth required
     await fetchApi('/requests', {
@@ -133,6 +133,8 @@ export const saveRequest = async (phone: string, name?: string): Promise<boolean
       body: JSON.stringify({
         studentPhone: phone,
         studentName: name,
+        department,
+        gender,
         status: RequestStatus.NEW,
         timestamp: Date.now()
       })
@@ -144,6 +146,8 @@ export const saveRequest = async (phone: string, name?: string): Promise<boolean
         id: Math.random().toString(36).substr(2, 9),
         studentPhone: phone,
         studentName: name,
+        department,
+        gender,
         status: RequestStatus.NEW,
         timestamp: Date.now()
       };
