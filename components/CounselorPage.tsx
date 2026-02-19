@@ -1,6 +1,7 @@
 import React from 'react';
 import { Award, BookHeart, GraduationCap, Quote, Lock, FileX, Shield, MessageCircle } from 'lucide-react';
 import { Navbar } from './Navbar';
+import { Footer } from './Footer';
 
 interface CounselorPageProps {
     onHomeClick: () => void;
@@ -175,6 +176,11 @@ export const CounselorPage: React.FC<CounselorPageProps> = ({
 
             </main>
 
+            <Footer
+                onHomeClick={onHomeClick}
+                onAboutClick={onAboutClick}
+                onMeetCounselorClick={() => { }}
+            />
 
         </div>
     );

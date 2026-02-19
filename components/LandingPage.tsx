@@ -6,6 +6,7 @@ import { MarqueeWall } from './MarqueeWall';
 import { ProcessTimeline } from './ProcessTimeline';
 import { Testimonials } from './Testimonials';
 import { Navbar } from './Navbar';
+import { Footer } from './Footer';
 import { MessageSquare, CheckCircle2, HelpCircle } from 'lucide-react';
 import { SplitText } from './SplitText';
 
@@ -211,15 +212,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                     </div>
                 </section>
 
-                {/* 10. Footer (Off-white BG) */}
-                <div className="bg-[#fbfbfa] dark:bg-[#202220] py-12 text-center border-t border-stone-100 dark:border-stone-800">
-                    <p className="text-sm font-semibold text-stone-500 dark:text-stone-400 mb-2">
-                        Built for AVCOE Students
-                    </p>
-                    <p className="text-xs text-stone-400 dark:text-stone-500">
-                        Training and Placement Office, AVCOE, Amrutnagar
-                    </p>
-                </div>
+                {/* 10. Footer */}
+                <Footer
+                    onHomeClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                    onAboutClick={onAboutClick}
+                    onMeetCounselorClick={onMeetCounselorClick}
+                />
 
                 {/* Contact Modal */}
                 <ContactModal

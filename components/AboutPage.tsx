@@ -4,6 +4,7 @@ import {
     Sparkles, Lock, Eye, Server, X, Terminal, Mail
 } from 'lucide-react';
 import { Navbar } from './Navbar';
+import { Footer } from './Footer';
 
 interface AboutPageProps {
     onHomeClick: () => void;
@@ -219,11 +220,11 @@ export const AboutPage: React.FC<AboutPageProps> = ({
                     </div>
                 </div>
 
-                <div className="mt-16 pb-12 text-center">
-                    <p className="text-xs text-stone-400 dark:text-stone-600 font-medium uppercase tracking-widest">
-                        Built with React & TypeScript for AVCOE
-                    </p>
-                </div>
+                <Footer
+                    onHomeClick={onHomeClick}
+                    onAboutClick={() => { }}
+                    onMeetCounselorClick={onMeetCounselorClick}
+                />
 
             </main>
         </div>
