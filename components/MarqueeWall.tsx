@@ -110,12 +110,12 @@ export const MarqueeWall: React.FC = () => {
 
         {/* Row 2 - Slower/Staggered */}
         <div className="flex overflow-hidden group">
-          <div className="flex gap-6 animate-marquee-slow shrink-0 items-center pr-6 group-hover:[animation-play-state:paused]">
+          <div className="flex gap-6 animate-marquee-reverse shrink-0 items-center pr-6 group-hover:[animation-play-state:paused]">
             {ROW_2.map((item) => (
               <Bubble key={item.id} item={item} onSelect={setSelectedProblem} />
             ))}
           </div>
-          <div className="flex gap-6 animate-marquee-slow shrink-0 items-center pr-6 group-hover:[animation-play-state:paused]">
+          <div className="flex gap-6 animate-marquee-reverse shrink-0 items-center pr-6 group-hover:[animation-play-state:paused]">
             {ROW_2.map((item) => (
               <Bubble key={`dup-${item.id}`} item={item} onSelect={setSelectedProblem} />
             ))}
