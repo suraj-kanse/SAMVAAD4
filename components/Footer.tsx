@@ -1,5 +1,5 @@
 import React from 'react';
-import { Github, Linkedin, Mail, Heart } from 'lucide-react';
+import { Github, Linkedin, Mail } from 'lucide-react';
 
 interface FooterProps {
     onHomeClick: () => void;
@@ -25,7 +25,7 @@ export const Footer: React.FC<FooterProps> = ({
                     <div>
                         <h3 className="text-white font-bold text-lg mb-3 tracking-tight">Counselling Centre</h3>
                         <p className="text-stone-400 text-sm leading-relaxed mb-4">
-                            A safe space for AVCOE students. Confidential, free, and always available when you need support.
+                            A safe, confidential space for AVCOE students & staff — because reaching out should never feel hard.
                         </p>
                         <div className="flex items-center gap-3">
                             <a
@@ -78,14 +78,6 @@ export const Footer: React.FC<FooterProps> = ({
                             >
                                 About
                             </button>
-                            <a
-                                href="https://wa.me/918698801090?text=Hello,%20I%20would%20like%20to%20speak%20with%20a%20student%20counsellor."
-                                target="_blank"
-                                rel="noreferrer"
-                                className="text-stone-400 hover:text-white text-sm text-left transition-colors duration-200"
-                            >
-                                WhatsApp Counselor
-                            </a>
                         </nav>
                     </div>
 
@@ -110,13 +102,9 @@ export const Footer: React.FC<FooterProps> = ({
                 {/* Divider */}
                 <div className="border-t border-stone-800 dark:border-stone-800/60"></div>
 
-                {/* Bottom Bar */}
-                <div className="py-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+                <div className="py-6 flex items-center justify-center">
                     <p className="text-xs text-stone-500">
                         © {currentYear} Counselling Centre, AVCOE. All rights reserved.
-                    </p>
-                    <p className="text-xs text-stone-500 flex items-center gap-1">
-                        Made with <Heart className="w-3 h-3 text-red-500 fill-red-500" /> by Suraj Kanse
                     </p>
                 </div>
             </div>
