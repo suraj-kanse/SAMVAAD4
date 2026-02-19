@@ -31,7 +31,7 @@ export const Navbar: React.FC<NavbarProps> = ({
       {/* Mobile Header */}
       <div className="md:hidden fixed inset-x-0 top-0 h-16 bg-white/90 dark:bg-[#1a1c1a]/90 backdrop-blur-md border-b border-stone-200/50 dark:border-white/5 flex items-center justify-between px-4 z-[100] transition-colors duration-300">
         <button onClick={() => handleNav(onHomeClick)} className="text-lg font-bold text-stone-800 dark:text-white tracking-tight">
-          Student Counselling
+          Counseling
         </button>
         <div className="flex items-center gap-3">
           <button
@@ -57,7 +57,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               onClick={() => handleNav(onHomeClick)}
               className={`p-4 text-left text-lg font-medium rounded-xl transition-colors ${activePage === 'home' ? 'bg-stone-100 dark:bg-stone-800 text-stone-900 dark:text-white' : 'hover:bg-stone-50 dark:hover:bg-stone-800/50 text-stone-600 dark:text-stone-300'}`}
             >
-              Student Counselling
+              Counseling
             </button>
             <button
               onClick={() => handleNav(onMeetCounselorClick)}
@@ -83,7 +83,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             onClick={onHomeClick}
             className={`px-5 py-2.5 rounded-full font-medium text-sm transition-colors ${activePage === 'home' ? 'bg-stone-900 dark:bg-white text-white dark:text-stone-900 shadow-sm' : 'text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-white/10 hover:text-stone-900 dark:hover:text-white'}`}
           >
-            Student Counselling
+            Counseling
           </button>
 
           <button

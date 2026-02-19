@@ -133,7 +133,7 @@ export const CounselorPage: React.FC<CounselorPageProps> = ({
                             </div>
                             <div>
                                 <h3 className="text-xl font-bold text-stone-900 dark:text-white mb-2">Nothing goes on your record</h3>
-                                <p className="text-stone-500 dark:text-stone-400 leading-relaxed">Counselling is entirely separate from your academic file. It won't appear anywhere, ever.</p>
+                                <p className="text-stone-500 dark:text-stone-400 leading-relaxed">Counseling is entirely separate from your academic file. It won't appear anywhere, ever.</p>
                             </div>
                         </div>
                         {/* Card 3 */}
@@ -154,7 +154,7 @@ export const CounselorPage: React.FC<CounselorPageProps> = ({
                     <div className="text-center mb-12">
                         <h2 className="text-3xl font-bold text-stone-900 dark:text-white mb-4">My Approach</h2>
                         <p className="text-lg text-stone-500 dark:text-stone-400 max-w-2xl mx-auto">
-                            What I believe about counselling and supporting students.
+                            What I believe about counseling and supporting students.
                         </p>
                     </div>
                     <div className="space-y-4">

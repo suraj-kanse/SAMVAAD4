@@ -35,7 +35,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
               <div className="w-8 h-8 bg-teal-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">
                 SC
               </div>
-              <span className="font-semibold text-slate-800 dark:text-white text-lg hidden md:block">Student Counselling</span>
+              <span className="font-semibold text-slate-800 dark:text-white text-lg hidden md:block">Student Counseling</span>
             </div>
 
             <div className="hidden md:flex items-center space-x-1">

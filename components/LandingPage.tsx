@@ -51,7 +51,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                         {/* Pill Badge */}
                         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#dbece4] dark:bg-[#1f3a2e] text-[#2c5f46] dark:text-[#7abfa1] text-sm font-medium mb-8 animate-fade-in">
                             <CheckCircle2 className="w-4 h-4" />
-                            <span>Counselling Centre • AVCOE, Sangamner</span>
+                            <span>Counseling Centre • AVCOE, Sangamner</span>
                         </div>
 
                         {/* Headline */}
@@ -149,7 +149,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                                     <div>
                                         <h3 className="font-bold text-stone-900 dark:text-white mb-2 leading-tight">"Will my teachers know?"</h3>
                                         <p className="text-sm md:text-base text-stone-600 dark:text-stone-400 leading-relaxed">
-                                            Absolutely not. Your counselling sessions are confidential and off-record.
+                                            Absolutely not. Your counseling sessions are confidential and off-record.
                                         </p>
                                     </div>
                                 </div>

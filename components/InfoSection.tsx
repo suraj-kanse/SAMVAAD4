@@ -20,7 +20,7 @@ const FEATURES = [
   {
     icon: Heart,
     title: "Always Free",
-    desc: "Counselling is free for all students and staff. No hidden costs."
+    desc: "Counseling is free for all students and staff. No hidden costs."
   }
 ];
 

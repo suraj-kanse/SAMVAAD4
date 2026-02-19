@@ -30,7 +30,7 @@ export const DevelopersPage: React.FC<DevelopersPageProps> = ({ onBack }) => {
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 py-12 px-4 transition-colors duration-300">
       <div className="max-w-5xl mx-auto">
-        <button 
+        <button
           onClick={onBack}
           className="flex items-center text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 mb-8 transition-colors"
         >
@@ -39,11 +39,11 @@ export const DevelopersPage: React.FC<DevelopersPageProps> = ({ onBack }) => {
 
         <div className="text-center mb-16 animate-fade-in">
           <div className="inline-flex items-center justify-center p-3 bg-teal-100 dark:bg-teal-900/30 text-teal-700 dark:text-teal-400 rounded-2xl mb-6">
-             <Terminal className="w-8 h-8" />
+            <Terminal className="w-8 h-8" />
           </div>
           <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-4">Meet the Builders</h1>
           <p className="text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
-            The minds behind the Student Counselling platform. We are a group of students dedicated to making mental health support accessible to everyone on campus through technology.
+            The minds behind the Student Counseling platform. We are a group of students dedicated to making mental health support accessible to everyone on campus through technology.
           </p>
         </div>
 
@@ -62,18 +62,18 @@ export const DevelopersPage: React.FC<DevelopersPageProps> = ({ onBack }) => {
               </p>
               <div className="flex gap-4 mt-auto">
                 <button className="p-2 rounded-full bg-slate-50 dark:bg-slate-800 text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">
-                    <Github className="w-5 h-5" />
+                  <Github className="w-5 h-5" />
                 </button>
                 <button className="p-2 rounded-full bg-slate-50 dark:bg-slate-800 text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all">
-                    <Linkedin className="w-5 h-5" />
+                  <Linkedin className="w-5 h-5" />
                 </button>
               </div>
             </div>
           ))}
         </div>
-        
+
         <div className="mt-20 text-center border-t border-slate-200 dark:border-slate-800 pt-8">
-            <p className="text-slate-400 dark:text-slate-600">Built with React, TypeScript & Tailwind CSS</p>
+          <p className="text-slate-400 dark:text-slate-600">Built with React, TypeScript & Tailwind CSS</p>
         </div>
       </div>
     </div>

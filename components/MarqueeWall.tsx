@@ -67,7 +67,7 @@ const PROBLEMS: Problem[] = [
     id: '10',
     text: "Other Struggles",
     description: "Facing something not listed here? Grief, trauma, financial stress, or just feeling 'off' without a name for it.",
-    solution: "Your struggle is valid, even if it doesn't have a label. The counselling centre is a safe space for *anything* that's on your mind."
+    solution: "Your struggle is valid, even if it doesn't have a label. The counseling centre is a safe space for *anything* that's on your mind."
   }
 ];
 
