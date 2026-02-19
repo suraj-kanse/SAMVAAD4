@@ -380,11 +380,11 @@ app.post('/api/whatsapp/send', async (req, res) => {
     const phoneId = process.env.WHATSAPP_PHONE_NUMBER_ID;
 
     if (token && phoneId) {
-      console.log(`🚀 Sending WhatsApp to Counselor (8698801090) about user: ${name}, ${phone}`);
+      console.log(`🚀 Sending WhatsApp to Counselor (8010777641) about user: ${name}, ${phone}`);
     } else {
       console.log("---------------------------------------------------");
       console.log("📨 SIMULATED WHATSAPP MESSAGE (No Credentials Found)");
-      console.log(`To: Counselor (8698801090)`);
+      console.log(`To: Counselor (8010777641)`);
       console.log(`Message: \n${message}`);
       console.log("---------------------------------------------------");
     }

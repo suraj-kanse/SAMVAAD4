@@ -91,7 +91,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                                 <span className="relative z-10">Drop Your Details Here</span>
                             </button>
                             <a
-                                href="https://wa.me/918698801090?text=Hello,%20I%20would%20like%20to%20speak%20with%20a%20student%20counsellor."
+                                href="https://wa.me/918010777641?text=Hello,%20I%20would%20like%20to%20speak%20with%20a%20student%20counsellor."
                                 target="_blank"
                                 rel="noreferrer"
                                 className="relative overflow-hidden w-full sm:w-auto px-8 py-4 bg-brand-green hover:bg-brand-greenHover text-white rounded-2xl font-semibold text-lg shadow-lg hover:shadow-brand-green/40 hover:-translate-y-1 active:translate-y-0 transition-all duration-300 flex items-center justify-center gap-2 group"
@@ -199,7 +199,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                             </button>
 
                             <a
-                                href="https://wa.me/918698801090?text=Hello,%20I%20would%20like%20to%20speak%20with%20a%20student%20counsellor."
+                                href="https://wa.me/918010777641?text=Hello,%20I%20would%20like%20to%20speak%20with%20a%20student%20counsellor."
                                 target="_blank"
                                 rel="noreferrer"
                                 className="relative overflow-hidden w-full sm:w-auto px-8 py-4 bg-[#67b588] hover:bg-[#5db878] text-white rounded-full font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2.5 hover:-translate-y-1 group"
