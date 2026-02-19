@@ -5,7 +5,7 @@ const STEPS = [
   {
     icon: MessageSquare,
     title: "1. Reach Out",
-    desc: "Share your contact. Takes 30 seconds."
+    desc: "Drop your details here. Takes 30 seconds."
   },
   {
     icon: Calendar,

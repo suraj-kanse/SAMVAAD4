@@ -11,6 +11,7 @@ export interface StudentRequest {
   studentName?: string;
   department?: string;
   gender?: string;
+  issue?: string;
   status: RequestStatus;
   timestamp: number;
 }

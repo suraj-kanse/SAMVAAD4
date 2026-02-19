@@ -367,13 +367,13 @@ app.post('/api/sessions', authMiddleware, roleMiddleware('counselor'), approvedO
 
 app.post('/api/whatsapp/send', async (req, res) => {
   try {
-    const { phone, name, department, gender } = req.body;
+    const { phone, name, department, gender, issue } = req.body;
 
     if (!phone) {
       return res.status(400).json({ error: 'Phone number is required' });
     }
 
-    const message = `Hello, I would like to connect with a counselor.\n\nMy Details:\nName: ${name || 'Not provided'}\nPhone: ${phone}\nDepartment: ${department || 'Not provided'}\nGender: ${gender || 'Not provided'}`;
+    const message = `Hello, I would like to connect with a counselor.\n\nMy Details:\nName: ${name || 'Not provided'}\nPhone: ${phone}\nDepartment: ${department || 'Not provided'}\nGender: ${gender || 'Not provided'}\nConcern: ${issue || 'Not provided'}`;
 
     // Check for credentials
     const token = process.env.WHATSAPP_API_TOKEN;

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Send, CheckCircle2, Loader2, Smartphone, User, Building2 } from 'lucide-react';
+import { Send, CheckCircle2, Loader2, Smartphone, User, Building2, MessageCircle } from 'lucide-react';
 import { saveRequest } from '../services/mockDb';
 
 // Use relative URLs so it works on both local dev and deployment
@@ -10,6 +10,7 @@ export const ContactForm: React.FC = () => {
   const [name, setName] = useState('');
   const [department, setDepartment] = useState('');
   const [gender, setGender] = useState('');
+  const [issue, setIssue] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -31,7 +32,7 @@ export const ContactForm: React.FC = () => {
 
     try {
       // 1. Log request to mock DB (non-blocking — don't fail if DB is down)
-      saveRequest(phone, name, department, gender).catch((err) => {
+      saveRequest(phone, name, department, gender, issue).catch((err) => {
         console.warn('DB save failed (non-critical):', err.message);
       });
 
@@ -41,7 +42,7 @@ export const ContactForm: React.FC = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ phone, name, department, gender }),
+        body: JSON.stringify({ phone, name, department, gender, issue }),
       });
 
       if (!response.ok) {
@@ -54,6 +55,7 @@ export const ContactForm: React.FC = () => {
       setName('');
       setDepartment('');
       setGender('');
+      setIssue('');
     } catch (err) {
       console.error(err);
       setError("Something went wrong. Please try again.");
@@ -87,7 +89,7 @@ export const ContactForm: React.FC = () => {
   return (
     <div className="bg-white dark:bg-[#252525] p-6 md:p-8 transition-colors duration-300">
       <div className="mb-6">
-        <h3 className="text-2xl font-bold text-stone-800 dark:text-white mb-2">Share your contact</h3>
+        <h3 className="text-2xl font-bold text-stone-800 dark:text-white mb-2">Drop Your Details Here</h3>
         <p className="text-stone-500 dark:text-stone-400">
           We'll reach out to you directly. No filling out long forms.
         </p>
@@ -172,6 +174,27 @@ export const ContactForm: React.FC = () => {
           </select>
         </div>
 
+        {/* Issue/Concern — Optional */}
+        <div>
+          <label htmlFor="issue" className="block text-sm font-medium text-stone-700 dark:text-stone-300 mb-1.5">
+            Your Concern <span className="text-stone-400 font-normal">(Optional)</span>
+          </label>
+          <div className="relative">
+            <div className="absolute top-3.5 left-0 pl-3 flex items-start pointer-events-none">
+              <MessageCircle className="h-5 w-5 text-stone-400" />
+            </div>
+            <textarea
+              id="issue"
+              value={issue}
+              onChange={(e) => setIssue(e.target.value)}
+              placeholder="Briefly describe what you're going through..."
+              rows={3}
+              maxLength={300}
+              className="block w-full pl-10 pr-3 py-3.5 border border-stone-200 dark:border-stone-700 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all outline-none bg-stone-50 dark:bg-[#1a1c1a] focus:bg-white dark:focus:bg-[#2a2d2a] text-stone-900 dark:text-white placeholder-stone-400 resize-none"
+            />
+          </div>
+        </div>
+
         {error && (
           <div className="text-red-500 dark:text-red-400 text-sm bg-red-50 dark:bg-red-900/20 p-3 rounded-lg border border-red-100 dark:border-red-900/30">
             {error}
@@ -196,7 +219,7 @@ export const ContactForm: React.FC = () => {
             </div>
           ) : (
             <div className="relative z-10 flex items-center">
-              Connect with us <Send className="ml-2 h-4 w-4" />
+              Drop Your Details Here <Send className="ml-2 h-4 w-4" />
             </div>
           )}
         </button>

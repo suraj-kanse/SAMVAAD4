@@ -5,6 +5,7 @@ const requestSchema = new mongoose.Schema({
   studentName: String,
   department: String,
   gender: String,
+  issue: String,
   status: {
     type: String,
     enum: ['new', 'contacted', 'scheduled', 'archived'],

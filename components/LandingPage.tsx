@@ -87,7 +87,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                             >
                                 <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] animate-shimmer"></span>
                                 <MessageSquare className="w-5 h-5 relative z-10" />
-                                <span className="relative z-10">Share your contact</span>
+                                <span className="relative z-10">Drop Your Details Here</span>
                             </button>
                             <a
                                 href="https://wa.me/918698801090?text=Hello,%20I%20would%20like%20to%20speak%20with%20a%20student%20counsellor."
@@ -194,7 +194,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                             >
                                 <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-stone-200/50 to-transparent translate-x-[-100%] animate-shimmer"></span>
                                 <MessageSquare className="w-5 h-5 relative z-10" />
-                                <span className="relative z-10">Share your contact</span>
+                                <span className="relative z-10">Drop Your Details Here</span>
                             </button>
 
                             <a

@@ -1,6 +1,6 @@
 import React from 'react';
 import { StudentRequest, RequestStatus } from '../../types';
-import { Phone, User, Clock, CheckCircle2, Archive, Calendar, UserPlus, Building2 } from 'lucide-react';
+import { Phone, User, Clock, CheckCircle2, Archive, Calendar, UserPlus, Building2, MessageCircle } from 'lucide-react';
 
 interface RequestCardProps {
   request: StudentRequest;
@@ -46,6 +46,12 @@ export const RequestCard: React.FC<RequestCardProps> = ({ request, onUpdateStatu
             <div className="flex items-center text-slate-500 dark:text-slate-400 mt-1 text-sm">
               <User className="w-3 h-3 mr-1.5" />
               {request.gender}
+            </div>
+          )}
+          {request.issue && (
+            <div className="flex items-start text-slate-500 dark:text-slate-400 mt-1.5 text-sm">
+              <MessageCircle className="w-3 h-3 mr-1.5 mt-0.5 flex-shrink-0" />
+              <span className="italic">{request.issue}</span>
             </div>
           )}
         </div>

@@ -167,7 +167,7 @@ export const MarqueeWall: React.FC = () => {
 
                 <div className="mt-8">
                   <a
-                    href={`https://wa.me/918698801090?text=${encodeURIComponent(`Hello, I would like to speak with a student counsellor about: ${selectedProblem.text}`)}`}
+                    href={`https://wa.me/918698801090?text=${encodeURIComponent(`Hii Ma'am, in the recent days I have been facing issues related to ${selectedProblem.text}. It's been affecting me and I would really like to talk about it. Can we have a conversation? 🙏`)}`}
                     target="_blank"
                     rel="noreferrer"
                     className="w-full py-4 bg-[#cc6b3e] hover:bg-[#b55d34] text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all hover:-translate-y-0.5 flex items-center justify-center gap-2 group"

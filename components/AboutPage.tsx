@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
     Shield, MessageCircle, Heart, Github, Linkedin,
-    Sparkles, Lock, Eye, Server, X, Code, Send, CheckCircle2, Mail
+    Sparkles, Lock, Eye, Server, X, Terminal, Mail
 } from 'lucide-react';
 import { Navbar } from './Navbar';
 
@@ -50,17 +50,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({
     isDark,
     onThemeToggle
 }) => {
-    const [feedbackSent, setFeedbackSent] = useState(false);
-    const [feedbackMsg, setFeedbackMsg] = useState('');
 
-    const handleFeedbackSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        setFeedbackSent(true);
-        setTimeout(() => {
-            setFeedbackSent(false);
-            setFeedbackMsg('');
-        }, 5000);
-    };
 
     return (
         <div className="min-h-screen bg-[#fbfbfa] dark:bg-[#1a1c1a] transition-colors duration-300 font-sans">
@@ -172,7 +162,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({
                 <div className="mb-24 bg-white dark:bg-[#252525] rounded-[2rem] border border-stone-200 dark:border-stone-800 p-8 md:p-12 flex flex-col md:flex-row gap-10 items-start">
                     <div className="w-full md:w-auto flex-shrink-0 flex flex-col items-center gap-6">
                         <div className="w-32 h-32 md:w-40 md:h-40 rounded-[2rem] bg-stone-100 dark:bg-stone-800 flex items-center justify-center text-stone-400 dark:text-stone-500 transform transition-transform hover:scale-105 hover:rotate-3 duration-500 shadow-sm hover:shadow-md border-4 border-transparent hover:border-stone-200 dark:hover:border-stone-700">
-                            <Code className="w-12 h-12" />
+                            <Terminal className="w-12 h-12" />
                         </div>
 
                         <div className="flex items-center justify-center gap-3 sm:gap-4">
@@ -215,39 +205,18 @@ export const AboutPage: React.FC<AboutPageProps> = ({
                         </p>
                     </div>
 
-                    {feedbackSent ? (
-                        <div className="bg-white dark:bg-[#252525] p-12 rounded-[2rem] border border-stone-200 dark:border-stone-800 text-center animate-fade-in">
-                            <div className="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center text-green-600 dark:text-green-400 mx-auto mb-6">
-                                <CheckCircle2 className="w-8 h-8" />
-                            </div>
-                            <h3 className="text-2xl font-bold text-stone-900 dark:text-white mb-2">Thank you!</h3>
-                            <p className="text-stone-500 dark:text-stone-400">Your feedback has been received.</p>
-                        </div>
-                    ) : (
-                        <div className="bg-white dark:bg-[#252525] p-8 md:p-10 rounded-[2rem] border border-stone-200 dark:border-stone-800 max-w-2xl mx-auto shadow-sm">
-                            <form onSubmit={handleFeedbackSubmit} className="space-y-6">
-                                <div>
-                                    <label className="block text-sm font-semibold text-stone-700 dark:text-stone-300 mb-2">
-                                        Your message <span className="text-red-400">*</span>
-                                    </label>
-                                    <textarea
-                                        required
-                                        rows={4}
-                                        value={feedbackMsg}
-                                        onChange={(e) => setFeedbackMsg(e.target.value)}
-                                        placeholder="Share your suggestion..."
-                                        className="w-full px-4 py-3 bg-stone-50 dark:bg-[#1a1c1a] border border-stone-200 dark:border-stone-800 rounded-xl focus:ring-2 focus:ring-[#cc6b3e] focus:border-transparent outline-none resize-none text-stone-900 dark:text-white placeholder-stone-400 transition-all"
-                                    />
-                                </div>
-                                <button
-                                    type="submit"
-                                    className="w-full py-4 bg-[#cc6b3e] hover:bg-[#b55d34] text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all hover:-translate-y-0.5 flex items-center justify-center gap-2"
-                                >
-                                    <Send className="w-4 h-4" /> Send Feedback
-                                </button>
-                            </form>
-                        </div>
-                    )}
+                    <div className="bg-white dark:bg-[#252525] p-8 md:p-10 rounded-[2rem] border border-stone-200 dark:border-stone-800 max-w-2xl mx-auto shadow-sm text-center">
+                        <p className="text-stone-600 dark:text-stone-300 mb-6 leading-relaxed">
+                            Your feedback is valuable for us! We will definitely consider your suggestions to make this platform better.
+                        </p>
+                        <a
+                            href={`mailto:surajkanse88@gmail.com?subject=${encodeURIComponent('I have some suggestions for your website')}&body=${encodeURIComponent(`I was going through your platform 'Counselling Centre, AVCOE'.\nI feel these things about it—\n\nThings I liked:\n\n\nI have some suggestions:\n\n\nThings I didn't like:\n\n`)}`}
+                            className="inline-flex items-center justify-center gap-2 py-4 px-8 bg-[#cc6b3e] hover:bg-[#b55d34] text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all hover:-translate-y-0.5"
+                        >
+                            <Mail className="w-5 h-5" />
+                            Help Us Improve
+                        </a>
+                    </div>
                 </div>
 
                 <div className="mt-16 pb-12 text-center">
