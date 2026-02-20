@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { LogIn, Mail, Lock, Eye, EyeOff, Loader2, ArrowLeft, UserPlus } from 'lucide-react';
-import { login } from '../services/mockDb';
+import { login } from '../services/api';
 import { AuthUser, UserRole } from '../types';
 
 interface LoginPageProps {
@@ -23,13 +23,40 @@ export const LoginPage: React.FC<LoginPageProps> = ({
     const [showPassword, setShowPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [failedAttempts, setFailedAttempts] = useState(0);
+    const [isLocked, setIsLocked] = useState(false);
+    const [lockCountdown, setLockCountdown] = useState(0);
+    const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+    useEffect(() => {
+        let timer: NodeJS.Timeout;
+        if (isLocked && lockCountdown > 0) {
+            timer = setTimeout(() => setLockCountdown(prev => prev - 1), 1000);
+        } else if (isLocked && lockCountdown === 0) {
+            setIsLocked(false);
+            setFailedAttempts(0);
+        }
+        return () => clearTimeout(timer);
+    }, [isLocked, lockCountdown]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError(null);
 
+        if (isLocked) {
+            setError(`Too many failed attempts. Please try again in ${lockCountdown} seconds.`);
+            return;
+        }
+
         if (!email || !password) {
             setError('Please enter both email and password.');
+            return;
+        }
+
+        // Basic Regex validation for email
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            setError('Please enter a valid email address.');
             return;
         }
 
@@ -54,9 +81,25 @@ export const LoginPage: React.FC<LoginPageProps> = ({
             onLoginSuccess(result.user);
         } catch (err: any) {
             setError(err.message || 'Login failed. Please try again.');
+            const newAttempts = failedAttempts + 1;
+            setFailedAttempts(newAttempts);
+            if (newAttempts >= 3) {
+                setIsLocked(true);
+                setLockCountdown(30);
+                setError('Too many failed attempts. Try again in 30 seconds.');
+            }
         } finally {
             setIsLoading(false);
         }
+    };
+
+    const handleForgotPassword = () => {
+        if (!email) {
+            setError('Please enter your email address to reset your password.');
+            return;
+        }
+        setToastMessage(`Password reset link sent to ${email}`);
+        setTimeout(() => setToastMessage(null), 3000);
     };
 
     const isAdmin = role === 'admin';
@@ -78,16 +121,22 @@ export const LoginPage: React.FC<LoginPageProps> = ({
                 </button>
 
                 {/* Card */}
-                <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl dark:shadow-black/30 border border-slate-200 dark:border-slate-800 p-8 transition-colors duration-300">
+                <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl dark:shadow-black/30 border border-slate-200 dark:border-slate-800 p-8 transition-colors duration-300 relative">
+                    {/* Toast Notification */}
+                    {toastMessage && (
+                        <div className="absolute -top-16 left-0 right-0 mx-auto w-fit bg-emerald-100 dark:bg-emerald-900/40 border border-emerald-300 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 px-4 py-2 rounded-lg shadow-md animate-fade-in text-sm text-center">
+                            {toastMessage}
+                        </div>
+                    )}
                     {/* Header */}
                     <div className="text-center mb-8">
                         <div className={`w-14 h-14 mx-auto rounded-xl flex items-center justify-center mb-4 ${isAdmin
-                                ? 'bg-violet-100 dark:bg-violet-900/40'
-                                : 'bg-teal-100 dark:bg-teal-900/40'
+                            ? 'bg-violet-100 dark:bg-violet-900/40'
+                            : 'bg-teal-100 dark:bg-teal-900/40'
                             }`}>
                             <LogIn className={`w-7 h-7 ${isAdmin
-                                    ? 'text-violet-600 dark:text-violet-400'
-                                    : 'text-teal-600 dark:text-teal-400'
+                                ? 'text-violet-600 dark:text-violet-400'
+                                : 'text-teal-600 dark:text-teal-400'
                                 }`} />
                         </div>
                         <h1 className="text-2xl font-bold text-slate-800 dark:text-white">{title}</h1>
@@ -141,6 +190,15 @@ export const LoginPage: React.FC<LoginPageProps> = ({
                                     {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                                 </button>
                             </div>
+                            <div className="flex justify-end mt-1">
+                                <button
+                                    type="button"
+                                    onClick={handleForgotPassword}
+                                    className="text-xs font-semibold text-teal-600 dark:text-teal-400 hover:text-teal-700 dark:hover:text-teal-300 transition-colors"
+                                >
+                                    Forgot Password?
+                                </button>
+                            </div>
                         </div>
 
                         {error && (
@@ -151,16 +209,21 @@ export const LoginPage: React.FC<LoginPageProps> = ({
 
                         <button
                             type="submit"
-                            disabled={isLoading}
-                            className={`w-full flex items-center justify-center py-3.5 px-6 rounded-xl shadow-lg text-white font-semibold text-base transition-all hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed ${isAdmin
-                                    ? 'bg-violet-600 hover:bg-violet-700 focus:ring-violet-500'
-                                    : 'bg-teal-600 hover:bg-teal-700 focus:ring-teal-500'
+                            disabled={isLoading || isLocked}
+                            className={`w-full flex items-center justify-center py-3.5 px-6 rounded-xl shadow-lg text-white font-semibold text-base transition-all hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none ${isAdmin
+                                ? 'bg-violet-600 hover:bg-violet-700 focus:ring-violet-500'
+                                : 'bg-teal-600 hover:bg-teal-700 focus:ring-teal-500'
                                 } focus:outline-none focus:ring-2 focus:ring-offset-2`}
                         >
                             {isLoading ? (
                                 <>
                                     <Loader2 className="animate-spin -ml-1 mr-2 h-5 w-5" />
                                     Signing in...
+                                </>
+                            ) : isLocked ? (
+                                <>
+                                    <Lock className="mr-2 h-5 w-5" />
+                                    Locked ({lockCountdown}s)
                                 </>
                             ) : (
                                 <>

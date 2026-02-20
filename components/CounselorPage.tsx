@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Award, BookHeart, GraduationCap, Quote, Lock, FileX, Shield, MessageCircle } from 'lucide-react';
 import { Navbar } from './Navbar';
 import { Footer } from './Footer';
@@ -16,6 +16,19 @@ export const CounselorPage: React.FC<CounselorPageProps> = ({
     isDark,
     onThemeToggle
 }) => {
+    useEffect(() => {
+        document.title = "Counselor | Samvaad";
+        const metaDescription = document.querySelector('meta[name="description"]');
+        if (metaDescription) {
+            metaDescription.setAttribute("content", "Meet Dr. Maya Patil, Student Counselor at Samvaad. Book a confidential counseling session today.");
+        } else {
+            const meta = document.createElement('meta');
+            meta.name = "description";
+            meta.content = "Meet Dr. Maya Patil, Student Counselor at Samvaad. Book a confidential counseling session today.";
+            document.head.appendChild(meta);
+        }
+    }, []);
+
     return (
         <div className="min-h-screen bg-[#fbfbfa] dark:bg-[#1a1c1a] transition-colors duration-300 font-sans">
 
@@ -43,14 +56,26 @@ export const CounselorPage: React.FC<CounselorPageProps> = ({
                             <h1 className="text-2xl font-bold text-stone-900 dark:text-white mb-2">Dr. Maya Patil</h1>
                             <p className="text-[#4a8067] dark:text-[#6ccca2] font-medium mb-6">Student Counsellor</p>
 
-                            <div className="flex flex-wrap gap-2 justify-center">
+                            <div className="mt-6 md:hidden w-full">
+                                <a
+                                    href="https://wa.me/918698801090?text=Hello,%20I%20would%20like%20to%20speak%20with%20a%20student%20counselor."
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="w-full py-3 px-6 bg-[#4a8067] hover:bg-[#3d6b56] text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all hover:-translate-y-0.5 flex items-center justify-center gap-2 group"
+                                >
+                                    <MessageCircle className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                                    Talk to Counselor
+                                </a>
+                            </div>
+
+                            <div className="flex flex-wrap gap-2 justify-center mt-6">
                                 <span className="px-3 py-1 bg-white dark:bg-[#252525] border border-stone-200 dark:border-stone-800 text-stone-600 dark:text-stone-300 text-xs rounded-full font-medium">M.A. Clinical Psychology</span>
                                 <span className="px-3 py-1 bg-white dark:bg-[#252525] border border-stone-200 dark:border-stone-800 text-stone-600 dark:text-stone-300 text-xs rounded-full font-medium">Child & Adolescent Psychology</span>
                             </div>
 
-                            <div className="mt-8 w-full">
+                            <div className="mt-8 w-full hidden md:block">
                                 <a
-                                    href="https://wa.me/918010777641?text=Hello,%20I%20would%20like%20to%20speak%20with%20a%20student%20counsellor."
+                                    href="https://wa.me/918698801090?text=Hello,%20I%20would%20like%20to%20speak%20with%20a%20student%20counselor."
                                     target="_blank"
                                     rel="noreferrer"
                                     className="w-full py-3 px-6 bg-[#4a8067] hover:bg-[#3d6b56] text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all hover:-translate-y-0.5 flex items-center justify-center gap-2 group"

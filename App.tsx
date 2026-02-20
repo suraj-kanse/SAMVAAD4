@@ -10,7 +10,7 @@ import { LoginPage } from './components/LoginPage';
 import { RegisterPage } from './components/RegisterPage';
 import { PendingApproval } from './components/PendingApproval';
 import { AdminDashboard } from './components/admin/AdminDashboard';
-import { getMe, getToken, logout } from './services/mockDb';
+import { getMe, getToken, logout } from './services/api';
 import { AuthUser } from './types';
 
 type ViewState =

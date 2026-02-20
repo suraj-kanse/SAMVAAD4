@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Student, Session } from '../../types';
-import { getStudentById, getSessionsByStudentId, addSession } from '../../services/mockDb';
+import { getStudentById, getSessionsByStudentId, addSession } from '../../services/api';
 import { ArrowLeft, Phone, Briefcase, User as UserIcon, Calendar, Plus, Clock, FileText, Lock, ArrowUpDown, Loader2 } from 'lucide-react';
 import { SessionModal } from './SessionModal';
 

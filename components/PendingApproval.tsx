@@ -1,6 +1,6 @@
 import React from 'react';
 import { Clock, ShieldX, ArrowLeft, LogOut } from 'lucide-react';
-import { logout } from '../services/mockDb';
+import { logout } from '../services/api';
 import { UserStatus } from '../types';
 
 interface PendingApprovalProps {

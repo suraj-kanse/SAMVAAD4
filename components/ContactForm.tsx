@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Send, CheckCircle2, Loader2, Smartphone, User, Building2, MessageCircle } from 'lucide-react';
-import { saveRequest } from '../services/mockDb';
+import { saveRequest } from '../services/api';
 
 // Use relative URLs so it works on both local dev and deployment
 const BASE_URL = (import.meta as any).env?.VITE_API_URL || '';

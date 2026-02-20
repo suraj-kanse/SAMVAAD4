@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { UserPlus, Mail, Lock, Eye, EyeOff, Loader2, ArrowLeft, User, CheckCircle2 } from 'lucide-react';
-import { register } from '../services/mockDb';
+import { register } from '../services/api';
 
 interface RegisterPageProps {
     onBack: () => void;
@@ -21,6 +21,21 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [isSuccess, setIsSuccess] = useState(false);
+
+    const getPasswordStrength = () => {
+        let score = 0;
+        if (!password) return score;
+        if (password.length >= 6) score += 1;
+        if (password.length >= 10) score += 1;
+        if (/[A-Z]/.test(password)) score += 1;
+        if (/[0-9]/.test(password)) score += 1;
+        if (/[^A-Za-z0-9]/.test(password)) score += 1;
+        return Math.min(score, 4); // 0-4
+    };
+
+    const strength = getPasswordStrength();
+    const strengthLabels = ['Weak', 'Fair', 'Good', 'Strong', 'Excellent'];
+    const strengthColors = ['bg-red-500', 'bg-orange-500', 'bg-yellow-500', 'bg-lime-500', 'bg-teal-500'];
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -170,6 +185,21 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({
                                     {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                                 </button>
                             </div>
+                            {password && (
+                                <div className="mt-2 animate-fade-in">
+                                    <div className="flex gap-1 h-1.5 w-full bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                                        {[0, 1, 2, 3].map((idx) => (
+                                            <div
+                                                key={idx}
+                                                className={`h-full flex-1 transition-colors ${idx < strength ? (strength === 4 ? strengthColors[4] : strengthColors[strength]) : 'bg-transparent'}`}
+                                            ></div>
+                                        ))}
+                                    </div>
+                                    <p className={`text-xs mt-1 font-medium ${password.length >= 6 ? 'text-slate-500 dark:text-slate-400' : 'text-red-500 dark:text-red-400'}`}>
+                                        {password.length < 6 ? 'Must be at least 6 characters' : `Strength: ${strengthLabels[strength]}`}
+                                    </p>
+                                </div>
+                            )}
                         </div>
 
                         <div>

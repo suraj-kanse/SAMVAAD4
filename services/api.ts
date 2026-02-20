@@ -7,11 +7,11 @@ const API_URL = `${BASE_URL}/api`;
 // --- TOKEN MANAGEMENT ---
 const TOKEN_KEY = 'samvaad_token';
 
-export const getToken = (): string | null => localStorage.getItem(TOKEN_KEY);
-export const setToken = (token: string): void => localStorage.setItem(TOKEN_KEY, token);
+export const getToken = (): string | null => sessionStorage.getItem(TOKEN_KEY);
+export const setToken = (token: string): void => sessionStorage.setItem(TOKEN_KEY, token);
 export const clearToken = (): void => {
-  localStorage.removeItem(TOKEN_KEY);
-  localStorage.removeItem('samvaad_user');
+  sessionStorage.removeItem(TOKEN_KEY);
+  sessionStorage.removeItem('samvaad_user');
 };
 
 // --- MOCK DATA STORE (Offline Fallback) ---
@@ -75,7 +75,7 @@ export const login = async (email: string, password: string): Promise<{ token: s
   }, false);
 
   setToken(result.token);
-  localStorage.setItem('samvaad_user', JSON.stringify(result.user));
+  sessionStorage.setItem('samvaad_user', JSON.stringify(result.user));
   return result;
 };
 
@@ -90,8 +90,15 @@ export const getMe = async (): Promise<AuthUser> => {
   return fetchApi<AuthUser>('/auth/me');
 };
 
-export const logout = (): void => {
-  clearToken();
+export const logout = async (): Promise<void> => {
+  try {
+    // Attempt to notify server of logout
+    await fetchApi('/auth/logout', { method: 'POST' });
+  } catch (err) {
+    // Ignore error if offline
+  } finally {
+    clearToken();
+  }
 };
 
 // ============================================================
@@ -99,14 +106,30 @@ export const logout = (): void => {
 // ============================================================
 
 export const getCounselors = async (): Promise<Counselor[]> => {
-  return fetchApi<Counselor[]>('/admin/counselors');
+  try {
+    return await fetchApi<Counselor[]>('/admin/counselors');
+  } catch (e: any) {
+    if (isOfflineError(e)) {
+      console.warn('Backend offline: Returning empty counselors list');
+      return Promise.resolve([]);
+    }
+    throw e;
+  }
 };
 
 export const updateCounselorStatus = async (id: string, status: string): Promise<Counselor> => {
-  return fetchApi<Counselor>(`/admin/counselors/${id}`, {
-    method: 'PATCH',
-    body: JSON.stringify({ status })
-  });
+  try {
+    return await fetchApi<Counselor>(`/admin/counselors/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify({ status })
+    });
+  } catch (e: any) {
+    if (isOfflineError(e)) {
+      console.warn('Backend offline: Faking counselor status update');
+      return Promise.resolve({ id, status, name: 'Offline Counselor', email: 'offline@samvaad', createdAt: new Date().toISOString() } as Counselor);
+    }
+    throw e;
+  }
 };
 
 // ============================================================

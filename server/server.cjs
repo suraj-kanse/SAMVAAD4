@@ -11,7 +11,12 @@ const { Request, Student, Session, User } = require('./models.cjs');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-const JWT_SECRET = process.env.JWT_SECRET || 'samvaad-dev-secret-change-me';
+const RAW_JWT_SECRET = process.env.JWT_SECRET;
+if (process.env.NODE_ENV === 'production' && (!RAW_JWT_SECRET || RAW_JWT_SECRET === 'samvaad-dev-secret-change-me')) {
+  console.error('❌ CRITICAL ERROR: Valid JWT_SECRET must be set in .env file in production.');
+  process.exit(1);
+}
+const JWT_SECRET = RAW_JWT_SECRET || 'samvaad-dev-secret-change-me';
 
 // --- SECURITY MIDDLEWARE ---
 // Disable CSP for dev/demo simplicity to avoid localhost issues
@@ -102,9 +107,21 @@ const roleMiddleware = (...roles) => {
 };
 
 // Counselor must be approved to access protected routes
-const approvedOnly = (req, res, next) => {
-  if (req.user.role === 'counselor' && req.user.status !== 'approved') {
-    return res.status(403).json({ error: 'Account not yet approved by admin.' });
+const approvedOnly = async (req, res, next) => {
+  if (req.user.role === 'counselor') {
+    try {
+      const user = await User.findById(req.user.userId);
+      if (!user) {
+        return res.status(401).json({ error: 'User not found.' });
+      }
+      if (user.status !== 'approved') {
+        return res.status(403).json({ error: 'Account not yet approved by admin or has been blocked.' });
+      }
+      // Update the user status on the request object just in case it changed
+      req.user.status = user.status;
+    } catch (err) {
+      return res.status(500).json({ error: 'Failed to verify user status.' });
+    }
   }
   next();
 };

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Shield, CheckCircle, XCircle, Clock, Loader2, LogOut, Sun, Moon, ArrowLeft, Users, RefreshCw } from 'lucide-react';
-import { getCounselors, updateCounselorStatus, logout } from '../../services/mockDb';
+import { Shield, CheckCircle, XCircle, Clock, Loader2, LogOut, Sun, Moon, ArrowLeft, Users, RefreshCw, Search, Filter } from 'lucide-react';
+import { getCounselors, updateCounselorStatus, logout } from '../../services/api';
 import { Counselor } from '../../types';
 
 interface AdminDashboardProps {
@@ -22,6 +22,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     const [isLoading, setIsLoading] = useState(true);
     const [updatingId, setUpdatingId] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [statusFilter, setStatusFilter] = useState('all');
 
     const fetchCounselors = async () => {
         setIsLoading(true);
@@ -59,6 +61,18 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         onLogout();
     };
 
+    const totalCounselors = counselors.length;
+    const pendingCounselors = counselors.filter(c => c.status === 'pending').length;
+    const approvedCounselors = counselors.filter(c => c.status === 'approved').length;
+    const blockedCounselors = counselors.filter(c => c.status === 'blocked').length;
+
+    const filteredCounselors = counselors.filter(c => {
+        const matchesSearch = c.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            c.email.toLowerCase().includes(searchQuery.toLowerCase());
+        const matchesStatus = statusFilter === 'all' || c.status === statusFilter;
+        return matchesSearch && matchesStatus;
+    });
+
     const getStatusBadge = (status: string) => {
         switch (status) {
             case 'approved':
@@ -93,9 +107,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     <div className="flex items-center gap-4">
                         <button
                             onClick={onBack}
-                            className="text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-colors"
+                            className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-colors font-medium text-sm"
                         >
                             <ArrowLeft className="w-5 h-5" />
+                            <span className="hidden sm:inline">Back to Home</span>
                         </button>
                         <div className="flex items-center gap-3">
                             <div className="w-8 h-8 bg-violet-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">
@@ -148,6 +163,61 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     </button>
                 </div>
 
+                {!isLoading && counselors.length > 0 && (
+                    <>
+                        {/* Metrics */}
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 rounded-xl shadow-sm">
+                                <p className="text-sm font-medium text-slate-500 dark:text-slate-400">Total</p>
+                                <p className="text-2xl font-bold text-slate-800 dark:text-white mt-1">{totalCounselors}</p>
+                            </div>
+                            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 rounded-xl shadow-sm">
+                                <p className="text-sm font-medium text-amber-600 dark:text-amber-500">Pending</p>
+                                <p className="text-2xl font-bold text-slate-800 dark:text-white mt-1">{pendingCounselors}</p>
+                            </div>
+                            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 rounded-xl shadow-sm">
+                                <p className="text-sm font-medium text-green-600 dark:text-green-500">Approved</p>
+                                <p className="text-2xl font-bold text-slate-800 dark:text-white mt-1">{approvedCounselors}</p>
+                            </div>
+                            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 rounded-xl shadow-sm">
+                                <p className="text-sm font-medium text-red-600 dark:text-red-500">Blocked</p>
+                                <p className="text-2xl font-bold text-slate-800 dark:text-white mt-1">{blockedCounselors}</p>
+                            </div>
+                        </div>
+
+                        {/* Search and Filter */}
+                        <div className="flex flex-col sm:flex-row gap-4 mb-8">
+                            <div className="relative flex-1">
+                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <Search className="h-4 w-4 text-slate-400" />
+                                </div>
+                                <input
+                                    type="text"
+                                    placeholder="Search by name or email..."
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    className="block w-full pl-10 pr-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent outline-none text-sm bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
+                                />
+                            </div>
+                            <div className="relative w-full sm:w-48">
+                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <Filter className="h-4 w-4 text-slate-400" />
+                                </div>
+                                <select
+                                    value={statusFilter}
+                                    onChange={(e) => setStatusFilter(e.target.value)}
+                                    className="block w-full pl-10 pr-8 py-2 border border-slate-200 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent outline-none text-sm bg-white dark:bg-slate-900 text-slate-900 dark:text-white appearance-none"
+                                >
+                                    <option value="all">All Counselors</option>
+                                    <option value="pending">Pending</option>
+                                    <option value="approved">Approved</option>
+                                    <option value="blocked">Blocked</option>
+                                </select>
+                            </div>
+                        </div>
+                    </>
+                )}
+
                 {error && (
                     <div className="text-red-500 dark:text-red-400 text-sm bg-red-50 dark:bg-red-900/20 p-4 rounded-xl border border-red-100 dark:border-red-900/30 mb-6">
                         {error}
@@ -158,17 +228,17 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     <div className="flex items-center justify-center py-20">
                         <Loader2 className="w-8 h-8 text-violet-600 dark:text-violet-400 animate-spin" />
                     </div>
-                ) : counselors.length === 0 ? (
+                ) : filteredCounselors.length === 0 ? (
                     <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-12 text-center transition-colors duration-300">
                         <Users className="w-12 h-12 text-slate-300 dark:text-slate-600 mx-auto mb-4" />
-                        <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-300 mb-2">No counselors registered yet</h3>
+                        <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-300 mb-2">No counselors found</h3>
                         <p className="text-slate-500 dark:text-slate-400 text-sm">
-                            Counselors will appear here once they register on the platform.
+                            Try adjusting your search or filters.
                         </p>
                     </div>
                 ) : (
                     <div className="space-y-4">
-                        {counselors.map((counselor) => (
+                        {filteredCounselors.map((counselor) => (
                             <div
                                 key={counselor.id}
                                 className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-colors duration-300 hover:border-slate-300 dark:hover:border-slate-700"
@@ -188,7 +258,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                                     )}
                                 </div>
 
-                                <div className="flex items-center gap-2">
+                                <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
                                     {counselor.status !== 'approved' && (
                                         <button
                                             onClick={() => handleStatusChange(counselor.id, 'approved')}
@@ -199,6 +269,20 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                                                 <Loader2 className="w-4 h-4 animate-spin" />
                                             ) : (
                                                 'Approve'
+                                            )}
+                                        </button>
+                                    )}
+
+                                    {counselor.status !== 'pending' && (
+                                        <button
+                                            onClick={() => handleStatusChange(counselor.id, 'pending')}
+                                            disabled={updatingId === counselor.id}
+                                            className="px-4 py-2 text-sm font-medium rounded-lg bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 hover:bg-amber-100 dark:hover:bg-amber-900/40 border border-amber-200 dark:border-amber-900/30 transition-colors disabled:opacity-50"
+                                        >
+                                            {updatingId === counselor.id ? (
+                                                <Loader2 className="w-4 h-4 animate-spin" />
+                                            ) : (
+                                                'Set Pending'
                                             )}
                                         </button>
                                     )}
