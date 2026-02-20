@@ -1,6 +1,6 @@
 export enum RequestStatus {
   NEW = "new",
-  CONTACTED = "contacted",
+  IN_PROGRESS = "in_progress",
   SCHEDULED = "scheduled",
   ARCHIVED = "archived"
 }
@@ -31,9 +31,9 @@ export interface Student {
 export interface Session {
   id: string;
   studentId: string;
-  topics: string[];
-  reason: string;
-  description: string;
+  topic: string;
+  problems: string;
+  feedback: string;
   privateNote?: string;
   attachmentUrl?: string; // Mock URL for visual demo
   date: number;

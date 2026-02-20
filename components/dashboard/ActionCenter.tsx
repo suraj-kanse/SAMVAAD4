@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { StudentRequest, RequestStatus, Student } from '../../types';
-import { getRequests, updateRequestStatus, addStudent } from '../../services/api';
+import { StudentRequest, RequestStatus, Student, Session } from '../../types';
+import { getRequests, updateRequestStatus, addStudent, getStudents, addSession } from '../../services/api';
 import { RequestCard } from './RequestCard';
 import { Inbox, CheckCircle, CalendarDays, RefreshCw } from 'lucide-react';
-import { CreateStudentModal } from './CreateStudentModal';
+import { SessionModal } from './SessionModal';
+import { RecentSessionsFeed } from './RecentSessionsFeed';
 
 export const ActionCenter: React.FC = () => {
   const [requests, setRequests] = useState<StudentRequest[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedRequestForProfile, setSelectedRequestForProfile] = useState<StudentRequest | null>(null);
+  const [sessionModalStudentId, setSessionModalStudentId] = useState<string | null>(null);
+  const [activeRequest, setActiveRequest] = useState<StudentRequest | null>(null);
 
   const fetchRequests = async () => {
     try {
@@ -42,17 +44,53 @@ export const ActionCenter: React.FC = () => {
     }
   };
 
-  const handleCreateProfile = async (student: Student) => {
-    const success = await addStudent(student);
-    if (success && selectedRequestForProfile) {
-      // Optional: Auto-archive or just close modal
+  const handleLogSession = async (req: StudentRequest) => {
+    try {
+      setLoading(true);
+      const allStudents = await getStudents();
+      const existing = allStudents.find(s => s.mobile === req.studentPhone);
+
+      if (existing) {
+        setSessionModalStudentId(existing.id);
+      } else {
+        const newStudent: Omit<Student, 'id'> = {
+          fullName: req.studentName || 'Anonymous Student',
+          mobile: req.studentPhone,
+          branch: req.department || '',
+          parentName: '',
+          parentMobile: '',
+          parentOccupation: '',
+          joinedAt: Date.now()
+        };
+        const created = await addStudent(newStudent as Student);
+        if (created) {
+          setSessionModalStudentId(created.id);
+        } else {
+          alert('Failed to initialize student profile.');
+        }
+      }
+      setActiveRequest(req);
+    } catch (e) {
+      console.error(e);
+      alert('Network error while mapping student.');
+    } finally {
+      setLoading(false);
     }
-    setSelectedRequestForProfile(null);
+  };
+
+  const handleSaveSession = async (session: Session) => {
+    await addSession(session);
+    setSessionModalStudentId(null);
+    if (activeRequest) {
+      // Auto-archive the request once session is logged
+      handleStatusUpdate(activeRequest.id, RequestStatus.ARCHIVED);
+    }
+    setActiveRequest(null);
   };
 
   const newRequests = requests.filter(r => r.status === RequestStatus.NEW);
-  const contactedRequests = requests.filter(r => r.status === RequestStatus.CONTACTED);
   const scheduledRequests = requests.filter(r => r.status === RequestStatus.SCHEDULED);
+  const inProgressRequests = requests.filter(r => r.status === RequestStatus.IN_PROGRESS);
 
   if (loading) {
     return (
@@ -89,42 +127,13 @@ export const ActionCenter: React.FC = () => {
         </div>
       </div>
 
-      {/* Column 2: In Progress */}
-      <div className="space-y-4">
-        <div className="flex items-center gap-2 mb-2">
-          <div className="p-2 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300 rounded-lg">
-            <CheckCircle className="w-5 h-5" />
-          </div>
-          <h3 className="font-semibold text-slate-800 dark:text-white">In Progress</h3>
-          <span className="ml-auto bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300 text-xs font-bold px-2.5 py-0.5 rounded-full">
-            {contactedRequests.length}
-          </span>
-        </div>
-
-        <div className="space-y-3">
-          {contactedRequests.length === 0 && (
-            <div className="text-center py-12 bg-slate-100/50 dark:bg-slate-800/30 rounded-xl border border-dashed border-slate-300 dark:border-slate-700">
-              <p className="text-slate-400 text-sm">No active conversations</p>
-            </div>
-          )}
-          {contactedRequests.map(req => (
-            <RequestCard
-              key={req.id}
-              request={req}
-              onUpdateStatus={handleStatusUpdate}
-              onCreateProfile={(r) => setSelectedRequestForProfile(r)}
-            />
-          ))}
-        </div>
-      </div>
-
-      {/* Column 3: Scheduled */}
+      {/* Column 2: Scheduled */}
       <div className="space-y-4">
         <div className="flex items-center gap-2 mb-2">
           <div className="p-2 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded-lg">
             <CalendarDays className="w-5 h-5" />
           </div>
-          <h3 className="font-semibold text-slate-800 dark:text-white">Scheduled Sessions</h3>
+          <h3 className="font-semibold text-slate-800 dark:text-white">Scheduled this Week</h3>
           <span className="ml-auto bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300 text-xs font-bold px-2.5 py-0.5 rounded-full">
             {scheduledRequests.length}
           </span>
@@ -141,20 +150,53 @@ export const ActionCenter: React.FC = () => {
               key={req.id}
               request={req}
               onUpdateStatus={handleStatusUpdate}
-              onCreateProfile={(r) => setSelectedRequestForProfile(r)}
+              onLogSession={handleLogSession}
             />
           ))}
         </div>
       </div>
 
-      {selectedRequestForProfile && (
-        <CreateStudentModal
-          initialPhone={selectedRequestForProfile.studentPhone}
-          initialName={selectedRequestForProfile.studentName}
-          onClose={() => setSelectedRequestForProfile(null)}
-          onSave={handleCreateProfile}
+      {/* Column 3: In Progress */}
+      <div className="space-y-4">
+        <div className="flex items-center gap-2 mb-2">
+          <div className="p-2 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300 rounded-lg">
+            <CheckCircle className="w-5 h-5" />
+          </div>
+          <h3 className="font-semibold text-slate-800 dark:text-white">In Progress</h3>
+          <span className="ml-auto bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300 text-xs font-bold px-2.5 py-0.5 rounded-full">
+            {inProgressRequests.length}
+          </span>
+        </div>
+
+        <div className="space-y-3">
+          {inProgressRequests.length === 0 && (
+            <div className="text-center py-12 bg-slate-100/50 dark:bg-slate-800/30 rounded-xl border border-dashed border-slate-300 dark:border-slate-700">
+              <p className="text-slate-400 text-sm">No active sessions</p>
+            </div>
+          )}
+          {inProgressRequests.map(req => (
+            <RequestCard
+              key={req.id}
+              request={req}
+              onUpdateStatus={handleStatusUpdate}
+              onLogSession={handleLogSession}
+            />
+          ))}
+        </div>
+      </div>
+
+      {sessionModalStudentId && (
+        <SessionModal
+          studentId={sessionModalStudentId}
+          onClose={() => setSessionModalStudentId(null)}
+          onSave={handleSaveSession}
         />
       )}
+
+      {/* Global Recent Sessions Feed */}
+      <div className="col-span-1 lg:col-span-3">
+        <RecentSessionsFeed />
+      </div>
 
     </div>
   );

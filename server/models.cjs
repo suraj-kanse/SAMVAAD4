@@ -8,7 +8,7 @@ const requestSchema = new mongoose.Schema({
   issue: String,
   status: {
     type: String,
-    enum: ['new', 'contacted', 'scheduled', 'archived'],
+    enum: ['new', 'in_progress', 'scheduled', 'archived'],
     default: 'new'
   },
   timestamp: { type: Number, default: Date.now }
@@ -27,9 +27,9 @@ const studentSchema = new mongoose.Schema({
 
 const sessionSchema = new mongoose.Schema({
   studentId: { type: String, required: true },
-  topics: [String],
-  reason: String,
-  description: String,
+  topic: String,
+  problems: String,
+  feedback: String,
   privateNote: String,
   attachmentUrl: String,
   date: { type: Number, default: Date.now }

@@ -11,16 +11,14 @@ interface SessionModalProps {
 const TOPICS = ["Exam Stress", "Family Issues", "Relationship", "Career Anxiety", "Depression", "Homesickness", "Substance Abuse", "Other"];
 
 export const SessionModal: React.FC<SessionModalProps> = ({ studentId, onClose, onSave }) => {
-  const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
-  const [reason, setReason] = useState('');
-  const [description, setDescription] = useState('');
+  const [topic, setTopic] = useState('');
+  const [problems, setProblems] = useState('');
+  const [feedback, setFeedback] = useState('');
   const [privateNote, setPrivateNote] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const toggleTopic = (topic: string) => {
-    setSelectedTopics(prev =>
-      prev.includes(topic) ? prev.filter(t => t !== topic) : [...prev, topic]
-    );
+  const toggleTopic = (t: string) => {
+    setTopic(t);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -32,9 +30,9 @@ export const SessionModal: React.FC<SessionModalProps> = ({ studentId, onClose, 
       studentId,
       // counselorId, // Removed
       // counselorName, // Removed
-      topics: selectedTopics,
-      reason,
-      description,
+      topic,
+      problems,
+      feedback,
       privateNote,
       date: Date.now()
     };
@@ -58,47 +56,47 @@ export const SessionModal: React.FC<SessionModalProps> = ({ studentId, onClose, 
 
           {/* Topics */}
           <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Topics Discussed</label>
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Primary Topic Discussed</label>
             <div className="flex flex-wrap gap-2">
-              {TOPICS.map(topic => (
+              {TOPICS.map(t => (
                 <button
-                  key={topic}
+                  key={t}
                   type="button"
-                  onClick={() => toggleTopic(topic)}
-                  className={`px-3 py-1.5 rounded-full text-sm font-medium border transition-colors ${selectedTopics.includes(topic)
+                  onClick={() => toggleTopic(t)}
+                  className={`px-3 py-1.5 rounded-full text-sm font-medium border transition-colors ${topic === t
                     ? 'bg-teal-50 dark:bg-teal-900/30 border-teal-200 dark:border-teal-700 text-teal-700 dark:text-teal-300'
                     : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-teal-200 dark:hover:border-teal-700'
                     }`}
                 >
-                  {topic}
+                  {t}
                 </button>
               ))}
             </div>
           </div>
 
-          {/* Reason */}
+          {/* Problems */}
           <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Reason for Consulting</label>
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Problems Identified</label>
             <input
               type="text"
               required
-              value={reason}
-              onChange={(e) => setReason(e.target.value)}
+              value={problems}
+              onChange={(e) => setProblems(e.target.value)}
               className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent outline-none bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
-              placeholder="e.g. Panic attack before internals"
+              placeholder="e.g. Trouble focusing, sleep deprivation..."
             />
           </div>
 
-          {/* Description */}
+          {/* Feedback */}
           <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Detailed Description</label>
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Feedback & Next Steps</label>
             <textarea
               rows={4}
               required
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              value={feedback}
+              onChange={(e) => setFeedback(e.target.value)}
               className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent outline-none resize-none bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
-              placeholder="Record the student's concerns, demeanor, and key discussion points..."
+              placeholder="e.g. Suggested pomodoro technique, scheduled follow-up..."
             />
           </div>
 

@@ -1,14 +1,14 @@
 import React from 'react';
 import { StudentRequest, RequestStatus } from '../../types';
-import { Phone, User, Clock, CheckCircle2, Archive, Calendar, UserPlus, Building2, MessageCircle } from 'lucide-react';
+import { Phone, User, Clock, CheckCircle2, Archive, Calendar, FilePlus, Building2, MessageCircle, Undo2, ArrowRight } from 'lucide-react';
 
 interface RequestCardProps {
   request: StudentRequest;
   onUpdateStatus: (id: string, status: RequestStatus) => void;
-  onCreateProfile?: (request: StudentRequest) => void;
+  onLogSession?: (request: StudentRequest) => void;
 }
 
-export const RequestCard: React.FC<RequestCardProps> = ({ request, onUpdateStatus, onCreateProfile }) => {
+export const RequestCard: React.FC<RequestCardProps> = ({ request, onUpdateStatus, onLogSession }) => {
   const timeAgo = (timestamp: number) => {
     const seconds = Math.floor((Date.now() - timestamp) / 1000);
     if (seconds < 60) return 'Just now';
@@ -65,40 +65,12 @@ export const RequestCard: React.FC<RequestCardProps> = ({ request, onUpdateStatu
         {request.status === RequestStatus.NEW && (
           <>
             <button
-              onClick={() => onUpdateStatus(request.id, RequestStatus.CONTACTED)}
-              className="flex-1 flex items-center justify-center gap-1.5 py-1.5 px-3 bg-teal-50 dark:bg-teal-900/30 text-teal-700 dark:text-teal-300 text-sm font-medium rounded-lg hover:bg-teal-100 dark:hover:bg-teal-900/50 transition-colors"
-            >
-              <CheckCircle2 className="w-4 h-4" />
-              Contacted
-            </button>
-            <button
-              onClick={() => onUpdateStatus(request.id, RequestStatus.ARCHIVED)}
-              className="p-1.5 text-slate-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
-              title="Archive"
-            >
-              <Archive className="w-4 h-4" />
-            </button>
-          </>
-        )}
-
-        {request.status === RequestStatus.CONTACTED && (
-          <>
-            <button
               onClick={() => onUpdateStatus(request.id, RequestStatus.SCHEDULED)}
               className="flex-1 flex items-center justify-center gap-1.5 py-1.5 px-3 bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 text-sm font-medium rounded-lg hover:bg-purple-100 dark:hover:bg-purple-900/50 transition-colors"
             >
               <Calendar className="w-4 h-4" />
               Schedule
             </button>
-            {onCreateProfile && (
-              <button
-                onClick={() => onCreateProfile(request)}
-                className="p-1.5 text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
-                title="Create Student Profile"
-              >
-                <UserPlus className="w-4 h-4" />
-              </button>
-            )}
             <button
               onClick={() => onUpdateStatus(request.id, RequestStatus.ARCHIVED)}
               className="p-1.5 text-slate-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
@@ -111,18 +83,56 @@ export const RequestCard: React.FC<RequestCardProps> = ({ request, onUpdateStatu
 
         {request.status === RequestStatus.SCHEDULED && (
           <>
-            <div className="flex-1 text-center text-xs text-purple-600 dark:text-purple-400 font-medium py-1.5 bg-purple-50 dark:bg-purple-900/20 rounded-lg flex items-center justify-center">
-              Session Scheduled
-            </div>
-            {onCreateProfile && (
+            <button
+              onClick={() => onUpdateStatus(request.id, RequestStatus.NEW)}
+              className="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
+              title="Undo to New"
+            >
+              <Undo2 className="w-4 h-4" />
+            </button>
+            <button
+              onClick={() => onUpdateStatus(request.id, RequestStatus.IN_PROGRESS)}
+              className="flex-1 flex items-center justify-center gap-1.5 py-1.5 px-3 bg-yellow-50 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 text-sm font-medium rounded-lg hover:bg-yellow-100 dark:hover:bg-yellow-900/50 transition-colors"
+            >
+              <ArrowRight className="w-4 h-4" />
+              Start Session
+            </button>
+            <button
+              onClick={() => onUpdateStatus(request.id, RequestStatus.ARCHIVED)}
+              className="p-1.5 text-slate-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+              title="Archive"
+            >
+              <Archive className="w-4 h-4" />
+            </button>
+          </>
+        )}
+
+        {request.status === RequestStatus.IN_PROGRESS && (
+          <>
+            <button
+              onClick={() => onUpdateStatus(request.id, RequestStatus.SCHEDULED)}
+              className="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
+              title="Undo to Scheduled"
+            >
+              <Undo2 className="w-4 h-4" />
+            </button>
+            {onLogSession && (
               <button
-                onClick={() => onCreateProfile(request)}
-                className="p-1.5 text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
-                title="Create Student Profile"
+                onClick={() => onLogSession(request)}
+                className="flex-1 flex items-center justify-center gap-1.5 py-1.5 px-3 bg-teal-50 dark:bg-teal-900/30 text-teal-700 dark:text-teal-400 text-sm font-medium rounded-lg hover:bg-teal-100 dark:hover:bg-teal-900/50 transition-colors"
+                title="Log Session & Add to Records"
               >
-                <UserPlus className="w-4 h-4" />
+                <FilePlus className="w-4 h-4" />
+                Log & Store
               </button>
             )}
+            <button
+              onClick={() => onUpdateStatus(request.id, RequestStatus.ARCHIVED)}
+              className="p-1.5 text-slate-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+              title="Archive"
+            >
+              <Archive className="w-4 h-4" />
+            </button>
           </>
         )}
       </div>

@@ -14,7 +14,6 @@ export const clearToken = (): void => {
   sessionStorage.removeItem('samvaad_user');
 };
 
-// --- MOCK DATA STORE (Offline Fallback) ---
 // These arrays serve as a temporary database when the backend is unreachable.
 let mockRequests: StudentRequest[] = [
   { id: '1', studentPhone: '9876543210', studentName: 'Demo Student', status: RequestStatus.NEW, timestamp: Date.now() - 3600000 }
@@ -225,18 +224,34 @@ export const getStudentById = async (id: string): Promise<Student | undefined> =
   }
 };
 
-export const addStudent = async (student: Student): Promise<boolean> => {
+export const addStudent = async (student: Student): Promise<Student | null> => {
   try {
     const { id, ...studentData } = student;
-    await fetchApi('/students', {
+    const added = await fetchApi<Student>('/students', {
       method: 'POST',
       body: JSON.stringify(studentData)
     });
-    return true;
+    return added;
   } catch (e: any) {
     if (isOfflineError(e)) {
       const newStudent = { ...student, id: Math.random().toString(36).substr(2, 9) };
       mockStudents = [newStudent, ...mockStudents];
+      return newStudent;
+    }
+    return null;
+  }
+};
+
+export const deleteStudent = async (id: string): Promise<boolean> => {
+  try {
+    await fetchApi(`/students/${id}`, {
+      method: 'DELETE'
+    });
+    return true;
+  } catch (e: any) {
+    if (isOfflineError(e)) {
+      mockStudents = mockStudents.filter(s => s.id !== id);
+      mockSessions = mockSessions.filter(s => s.studentId !== id);
       return true;
     }
     return false;
@@ -246,6 +261,17 @@ export const addStudent = async (student: Student): Promise<boolean> => {
 // ============================================================
 // SESSIONS (All protected)
 // ============================================================
+
+export const getSessions = async (): Promise<Session[]> => {
+  try {
+    return await fetchApi<Session[]>('/sessions');
+  } catch (e: any) {
+    if (isOfflineError(e)) {
+      return [...mockSessions].sort((a, b) => b.date - a.date);
+    }
+    return [];
+  }
+};
 
 export const getSessionsByStudentId = async (studentId: string): Promise<Session[]> => {
   try {

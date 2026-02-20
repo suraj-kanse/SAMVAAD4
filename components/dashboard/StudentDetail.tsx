@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Student, Session } from '../../types';
-import { getStudentById, getSessionsByStudentId, addSession } from '../../services/api';
-import { ArrowLeft, Phone, Briefcase, User as UserIcon, Calendar, Plus, Clock, FileText, Lock, ArrowUpDown, Loader2 } from 'lucide-react';
+import { getStudentById, getSessionsByStudentId, addSession, deleteStudent } from '../../services/api';
+import { ArrowLeft, Phone, Briefcase, User as UserIcon, Calendar, Plus, Clock, FileText, Lock, ArrowUpDown, Loader2, Trash2 } from 'lucide-react';
 import { SessionModal } from './SessionModal';
 
 interface StudentDetailProps {
@@ -15,6 +15,7 @@ export const StudentDetail: React.FC<StudentDetailProps> = ({ studentId, onBack 
     const [loading, setLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [sortNewestFirst, setSortNewestFirst] = useState(true);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     const fetchData = async () => {
         setLoading(true);
@@ -36,6 +37,20 @@ export const StudentDetail: React.FC<StudentDetailProps> = ({ studentId, onBack 
         // Don't full reload, just fetch sessions
         const sessData = await getSessionsByStudentId(studentId);
         setSessions(sessData);
+    };
+
+    const handleDeleteStudent = async () => {
+        if (!student) return;
+        if (window.confirm(`Are you sure you want to delete ${student.fullName}? This will permanently remove their profile and all associated session history.`)) {
+            setIsDeleting(true);
+            const success = await deleteStudent(studentId);
+            if (success) {
+                onBack(); // Go back to the roster explicitly
+            } else {
+                alert('Failed to delete student.');
+                setIsDeleting(false);
+            }
+        }
     };
 
     const sortedSessions = [...sessions].sort((a, b) => {
@@ -73,6 +88,14 @@ export const StudentDetail: React.FC<StudentDetailProps> = ({ studentId, onBack 
                         <a href={`tel:${student.mobile}`} className="flex items-center gap-2 px-4 py-2 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-700 dark:text-slate-300 font-medium hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
                             <Phone className="w-4 h-4" /> Call Student
                         </a>
+                        <button
+                            onClick={handleDeleteStudent}
+                            disabled={isDeleting}
+                            className="flex items-center gap-2 px-4 py-2 border border-red-200 dark:border-red-900/30 text-red-600 dark:text-red-400 rounded-lg font-medium hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors shadow-sm disabled:opacity-50"
+                        >
+                            {isDeleting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
+                            Delete
+                        </button>
                         <button
                             onClick={() => setIsModalOpen(true)}
                             className="flex items-center gap-2 px-4 py-2 bg-teal-600 text-white rounded-lg font-medium hover:bg-teal-700 transition-colors shadow-sm"
@@ -152,11 +175,9 @@ export const StudentDetail: React.FC<StudentDetailProps> = ({ studentId, onBack 
                                 <div className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow">
                                     <div className="flex justify-between items-start mb-2">
                                         <div className="flex flex-wrap gap-2 mb-2">
-                                            {session.topics.map(t => (
-                                                <span key={t} className="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-medium border border-slate-200 dark:border-slate-700">
-                                                    {t}
-                                                </span>
-                                            ))}
+                                            <span className="px-2 py-0.5 rounded-md bg-teal-50 dark:bg-teal-900/30 text-teal-700 dark:text-teal-300 text-xs font-semibold border border-teal-200 dark:border-teal-800/50">
+                                                {session.topic}
+                                            </span>
                                         </div>
                                         <span className="text-xs text-slate-400 flex items-center">
                                             <Clock className="w-3 h-3 mr-1" />
@@ -164,10 +185,18 @@ export const StudentDetail: React.FC<StudentDetailProps> = ({ studentId, onBack 
                                         </span>
                                     </div>
 
-                                    <h4 className="font-semibold text-slate-800 dark:text-white text-lg mb-1">{session.reason}</h4>
-                                    <p className="text-slate-600 dark:text-slate-300 text-sm leading-relaxed mb-3">
-                                        {session.description}
-                                    </p>
+                                    <div className="mb-3">
+                                        <h4 className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Problems Identified</h4>
+                                        <p className="text-slate-800 dark:text-slate-200 text-sm leading-relaxed">
+                                            {session.problems}
+                                        </p>
+                                    </div>
+                                    <div className="mb-3">
+                                        <h4 className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Feedback & Next Steps</h4>
+                                        <p className="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
+                                            {session.feedback}
+                                        </p>
+                                    </div>
 
                                     {session.privateNote && (
                                         <div className="mt-3 bg-yellow-50 dark:bg-yellow-900/20 p-3 rounded-lg border border-yellow-100 dark:border-yellow-900/30 flex gap-3">
@@ -196,13 +225,15 @@ export const StudentDetail: React.FC<StudentDetailProps> = ({ studentId, onBack 
                 </div>
             </div>
 
-            {isModalOpen && (
-                <SessionModal
-                    studentId={studentId}
-                    onClose={() => setIsModalOpen(false)}
-                    onSave={handleSaveSession}
-                />
-            )}
-        </div>
+            {
+                isModalOpen && (
+                    <SessionModal
+                        studentId={studentId}
+                        onClose={() => setIsModalOpen(false)}
+                        onSave={handleSaveSession}
+                    />
+                )
+            }
+        </div >
     );
 };

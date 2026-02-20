@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Student } from '../../types';
-import { getStudents } from '../../services/api';
-import { Search, ChevronRight, Phone, BookOpen, ArrowUpDown, Loader2 } from 'lucide-react';
+import { getStudents, deleteStudent } from '../../services/api';
+import { Search, ChevronRight, Phone, BookOpen, ArrowUpDown, Loader2, Trash2 } from 'lucide-react';
 
 interface StudentRepositoryProps {
     onSelectStudent: (studentId: string) => void;
@@ -15,15 +15,32 @@ export const StudentRepository: React.FC<StudentRepositoryProps> = ({ onSelectSt
     const [search, setSearch] = useState('');
     const [sortField, setSortField] = useState<SortField>('date');
     const [sortDesc, setSortDesc] = useState(true);
+    const [isDeleting, setIsDeleting] = useState<string | null>(null);
+
+    const fetchStudents = async () => {
+        setLoading(true);
+        const data = await getStudents();
+        setStudents(data);
+        setLoading(false);
+    };
 
     useEffect(() => {
-        const fetchStudents = async () => {
-            const data = await getStudents();
-            setStudents(data);
-            setLoading(false);
-        };
         fetchStudents();
     }, []);
+
+    const handleDelete = async (e: React.MouseEvent, id: string, name: string) => {
+        e.stopPropagation();
+        if (window.confirm(`Are you sure you want to delete the student record for ${name}? This action cannot be undone and will delete all associated sessions.`)) {
+            setIsDeleting(id);
+            const success = await deleteStudent(id);
+            if (success) {
+                setStudents(students.filter(s => s.id !== id));
+            } else {
+                alert('Failed to delete student. Please try again.');
+            }
+            setIsDeleting(null);
+        }
+    };
 
     const handleSort = (field: SortField) => {
         if (sortField === field) {
@@ -164,9 +181,23 @@ export const StudentRepository: React.FC<StudentRepositoryProps> = ({ onSelectSt
                                             <div className="text-xs text-slate-500 dark:text-slate-400">{student.parentOccupation}</div>
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                            <button className="text-teal-600 hover:text-teal-900 dark:text-teal-400 dark:hover:text-teal-300 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                <ChevronRight className="w-5 h-5" />
-                                            </button>
+                                            <div className="flex items-center justify-end gap-3 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                                                <button
+                                                    onClick={(e) => handleDelete(e, student.id, student.fullName)}
+                                                    disabled={isDeleting === student.id}
+                                                    className="p-2 text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/40 rounded-lg transition-colors disabled:opacity-50"
+                                                    title="Delete Student"
+                                                >
+                                                    {isDeleting === student.id ? (
+                                                        <Loader2 className="w-5 h-5 animate-spin" />
+                                                    ) : (
+                                                        <Trash2 className="w-5 h-5" />
+                                                    )}
+                                                </button>
+                                                <button className="p-2 text-teal-600 hover:text-teal-900 dark:text-teal-400 dark:hover:text-teal-300 hover:bg-teal-50 dark:hover:bg-teal-900/40 rounded-lg transition-colors">
+                                                    <ChevronRight className="w-5 h-5" />
+                                                </button>
+                                            </div>
                                         </td>
                                     </tr>
                                 ))

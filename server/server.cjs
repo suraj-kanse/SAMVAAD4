@@ -353,6 +353,20 @@ app.post('/api/students', authMiddleware, roleMiddleware('counselor'), approvedO
   }
 });
 
+app.delete('/api/students/:id', authMiddleware, roleMiddleware('counselor'), approvedOnly, async (req, res) => {
+  try {
+    const student = await Student.findByIdAndDelete(req.params.id);
+    if (!student) {
+      return res.status(404).json({ error: 'Student not found' });
+    }
+    // Also delete associated sessions
+    await Session.deleteMany({ studentId: req.params.id });
+    res.json({ success: true, message: 'Student deleted successfully' });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 // ============================================================
 // PROTECTED ROUTES — Sessions (Counselor-only)
 // ============================================================
