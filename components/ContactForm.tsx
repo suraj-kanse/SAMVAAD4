@@ -36,7 +36,7 @@ export const ContactForm: React.FC = () => {
         console.warn('DB save failed (non-critical):', err.message);
       });
 
-      // 2. Send details to Counselor via Backend API
+      // 2. Send details to Counsellor via Backend API
       const response = await fetch(`${BASE_URL}/api/whatsapp/send`, {
         method: 'POST',
         headers: {

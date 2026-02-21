@@ -8,7 +8,7 @@ import { Footer } from './Footer';
 
 interface AboutPageProps {
     onHomeClick: () => void;
-    onMeetCounselorClick: () => void;
+    onMeetCounsellorClick: () => void;
     isDark: boolean;
     onThemeToggle: () => void;
 }
@@ -40,14 +40,14 @@ const PRINCIPLES = [
 
 const NOT_LIST = [
     "Not a commercial product — no ads, no premium tiers.",
-    "Not a replacement for clinical therapy — we connect you to a counselor.",
+    "Not a replacement for clinical therapy — we connect you to a counsellor.",
     "Not a data company — we don't sell your info.",
     "Not trying to scale — focused on quality."
 ];
 
 export const AboutPage: React.FC<AboutPageProps> = ({
     onHomeClick,
-    onMeetCounselorClick,
+    onMeetCounsellorClick,
     isDark,
     onThemeToggle
 }) => {
@@ -59,7 +59,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({
             <Navbar
                 onHomeClick={onHomeClick}
                 onAboutClick={() => { }} // Already on About page
-                onMeetCounselorClick={onMeetCounselorClick}
+                onMeetCounsellorClick={onMeetCounsellorClick}
                 isDark={isDark}
                 onThemeToggle={onThemeToggle}
                 activePage="about"
@@ -95,7 +95,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({
                         </div>
                         <h3 className="text-lg font-bold text-stone-800 dark:text-white mb-2">100% Confidential</h3>
                         <p className="text-stone-500 dark:text-stone-400 text-sm leading-relaxed">
-                            Your conversations stay between you and the counselor. Nothing goes on your academic record. Ever.
+                            Your conversations stay between you and the counsellor. Nothing goes on your academic record. Ever.
                         </p>
                     </div>
                     <div className="bg-white dark:bg-[#252525] p-8 rounded-3xl border border-stone-100 dark:border-stone-800 shadow-sm">
@@ -208,7 +208,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({
                             Your feedback is valuable for us! We will definitely consider your suggestions to make this platform better.
                         </p>
                         <a
-                            href={`mailto:surajkanse88@gmail.com?subject=${encodeURIComponent('I have some suggestions for your website')}&body=${encodeURIComponent(`I was going through your platform 'Counseling Centre, AVCOE'.\nI feel these things about it—\n\nThings I liked:\n\n\nI have some suggestions:\n\n\nThings I didn't like:\n\n`)}`}
+                            href={`mailto:surajkanse88@gmail.com?subject=${encodeURIComponent('I have some suggestions for your website')}&body=${encodeURIComponent(`I was going through your platform 'Counselling Centre, AVCOE'.\nI feel these things about it—\n\nThings I liked:\n\n\nI have some suggestions:\n\n\nThings I didn't like:\n\n`)}`}
                             className="inline-flex items-center justify-center gap-2 py-4 px-8 bg-[#cc6b3e] hover:bg-[#b55d34] text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all hover:-translate-y-0.5"
                         >
                             <Mail className="w-5 h-5" />
@@ -220,7 +220,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({
                 <Footer
                     onHomeClick={onHomeClick}
                     onAboutClick={() => { }}
-                    onMeetCounselorClick={onMeetCounselorClick}
+                    onMeetCounsellorClick={onMeetCounsellorClick}
                 />
 
             </main >

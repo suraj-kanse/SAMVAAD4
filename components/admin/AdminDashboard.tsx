@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Shield, CheckCircle, XCircle, Clock, Loader2, LogOut, Sun, Moon, ArrowLeft, Users, RefreshCw, Search, Filter } from 'lucide-react';
-import { getCounselors, updateCounselorStatus, logout } from '../../services/api';
-import { Counselor } from '../../types';
+import { getCounsellors, updateCounsellorStatus, logout } from '../../services/api';
+import { Counsellor } from '../../types';
 
 interface AdminDashboardProps {
     adminName: string;
@@ -18,39 +18,39 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     isDark,
     onThemeToggle
 }) => {
-    const [counselors, setCounselors] = useState<Counselor[]>([]);
+    const [counsellors, setCounsellors] = useState<Counsellor[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [updatingId, setUpdatingId] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [statusFilter, setStatusFilter] = useState('all');
 
-    const fetchCounselors = async () => {
+    const fetchCounsellors = async () => {
         setIsLoading(true);
         setError(null);
         try {
-            const data = await getCounselors();
-            setCounselors(data);
+            const data = await getCounsellors();
+            setCounsellors(data);
         } catch (err: any) {
-            setError(err.message || 'Failed to load counselors.');
+            setError(err.message || 'Failed to load counsellors.');
         } finally {
             setIsLoading(false);
         }
     };
 
     useEffect(() => {
-        fetchCounselors();
+        fetchCounsellors();
     }, []);
 
     const handleStatusChange = async (id: string, status: string) => {
         setUpdatingId(id);
         try {
-            const updated = await updateCounselorStatus(id, status);
-            setCounselors(prev =>
+            const updated = await updateCounsellorStatus(id, status);
+            setCounsellors(prev =>
                 prev.map(c => c.id === id ? { ...c, status: updated.status } : c)
             );
         } catch (err: any) {
-            setError(err.message || 'Failed to update counselor status.');
+            setError(err.message || 'Failed to update counsellor status.');
         } finally {
             setUpdatingId(null);
         }
@@ -61,12 +61,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         onLogout();
     };
 
-    const totalCounselors = counselors.length;
-    const pendingCounselors = counselors.filter(c => c.status === 'pending').length;
-    const approvedCounselors = counselors.filter(c => c.status === 'approved').length;
-    const blockedCounselors = counselors.filter(c => c.status === 'blocked').length;
+    const totalCounsellors = counsellors.length;
+    const pendingCounsellors = counsellors.filter(c => c.status === 'pending').length;
+    const approvedCounsellors = counsellors.filter(c => c.status === 'approved').length;
+    const blockedCounsellors = counsellors.filter(c => c.status === 'blocked').length;
 
-    const filteredCounselors = counselors.filter(c => {
+    const filteredCounsellors = counsellors.filter(c => {
         const matchesSearch = c.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
             c.email.toLowerCase().includes(searchQuery.toLowerCase());
         const matchesStatus = statusFilter === 'all' || c.status === statusFilter;
@@ -149,12 +149,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     <div>
                         <h1 className="text-2xl font-bold text-slate-800 dark:text-white flex items-center gap-3">
                             <Users className="w-7 h-7 text-violet-600 dark:text-violet-400" />
-                            Manage Counselors
+                            Manage Counsellors
                         </h1>
-                        <p className="text-slate-500 dark:text-slate-400 mt-1">Approve or block counselor access to the platform</p>
+                        <p className="text-slate-500 dark:text-slate-400 mt-1">Approve or block counsellor access to the platform</p>
                     </div>
                     <button
-                        onClick={fetchCounselors}
+                        onClick={fetchCounsellors}
                         disabled={isLoading}
                         className="p-2 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
                         title="Refresh"
@@ -163,25 +163,25 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     </button>
                 </div>
 
-                {!isLoading && counselors.length > 0 && (
+                {!isLoading && counsellors.length > 0 && (
                     <>
                         {/* Metrics */}
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                             <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 rounded-xl shadow-sm">
                                 <p className="text-sm font-medium text-slate-500 dark:text-slate-400">Total</p>
-                                <p className="text-2xl font-bold text-slate-800 dark:text-white mt-1">{totalCounselors}</p>
+                                <p className="text-2xl font-bold text-slate-800 dark:text-white mt-1">{totalCounsellors}</p>
                             </div>
                             <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 rounded-xl shadow-sm">
                                 <p className="text-sm font-medium text-amber-600 dark:text-amber-500">Pending</p>
-                                <p className="text-2xl font-bold text-slate-800 dark:text-white mt-1">{pendingCounselors}</p>
+                                <p className="text-2xl font-bold text-slate-800 dark:text-white mt-1">{pendingCounsellors}</p>
                             </div>
                             <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 rounded-xl shadow-sm">
                                 <p className="text-sm font-medium text-green-600 dark:text-green-500">Approved</p>
-                                <p className="text-2xl font-bold text-slate-800 dark:text-white mt-1">{approvedCounselors}</p>
+                                <p className="text-2xl font-bold text-slate-800 dark:text-white mt-1">{approvedCounsellors}</p>
                             </div>
                             <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 rounded-xl shadow-sm">
                                 <p className="text-sm font-medium text-red-600 dark:text-red-500">Blocked</p>
-                                <p className="text-2xl font-bold text-slate-800 dark:text-white mt-1">{blockedCounselors}</p>
+                                <p className="text-2xl font-bold text-slate-800 dark:text-white mt-1">{blockedCounsellors}</p>
                             </div>
                         </div>
 
@@ -208,7 +208,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                                     onChange={(e) => setStatusFilter(e.target.value)}
                                     className="block w-full pl-10 pr-8 py-2 border border-slate-200 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent outline-none text-sm bg-white dark:bg-slate-900 text-slate-900 dark:text-white appearance-none"
                                 >
-                                    <option value="all">All Counselors</option>
+                                    <option value="all">All Counsellors</option>
                                     <option value="pending">Pending</option>
                                     <option value="approved">Approved</option>
                                     <option value="blocked">Blocked</option>
@@ -228,30 +228,30 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     <div className="flex items-center justify-center py-20">
                         <Loader2 className="w-8 h-8 text-violet-600 dark:text-violet-400 animate-spin" />
                     </div>
-                ) : filteredCounselors.length === 0 ? (
+                ) : filteredCounsellors.length === 0 ? (
                     <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-12 text-center transition-colors duration-300">
                         <Users className="w-12 h-12 text-slate-300 dark:text-slate-600 mx-auto mb-4" />
-                        <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-300 mb-2">No counselors found</h3>
+                        <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-300 mb-2">No counsellors found</h3>
                         <p className="text-slate-500 dark:text-slate-400 text-sm">
                             Try adjusting your search or filters.
                         </p>
                     </div>
                 ) : (
                     <div className="space-y-4">
-                        {filteredCounselors.map((counselor) => (
+                        {filteredCounsellors.map((counsellor) => (
                             <div
-                                key={counselor.id}
+                                key={counsellor.id}
                                 className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-colors duration-300 hover:border-slate-300 dark:hover:border-slate-700"
                             >
                                 <div className="flex-1">
                                     <div className="flex items-center gap-3 mb-1">
-                                        <h3 className="text-base font-semibold text-slate-800 dark:text-white">{counselor.name}</h3>
-                                        {getStatusBadge(counselor.status)}
+                                        <h3 className="text-base font-semibold text-slate-800 dark:text-white">{counsellor.name}</h3>
+                                        {getStatusBadge(counsellor.status)}
                                     </div>
-                                    <p className="text-sm text-slate-500 dark:text-slate-400">{counselor.email}</p>
-                                    {counselor.createdAt && (
+                                    <p className="text-sm text-slate-500 dark:text-slate-400">{counsellor.email}</p>
+                                    {counsellor.createdAt && (
                                         <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">
-                                            Registered: {new Date(counselor.createdAt).toLocaleDateString('en-IN', {
+                                            Registered: {new Date(counsellor.createdAt).toLocaleDateString('en-IN', {
                                                 day: 'numeric', month: 'short', year: 'numeric'
                                             })}
                                         </p>
@@ -259,13 +259,13 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                                 </div>
 
                                 <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
-                                    {counselor.status !== 'approved' && (
+                                    {counsellor.status !== 'approved' && (
                                         <button
-                                            onClick={() => handleStatusChange(counselor.id, 'approved')}
-                                            disabled={updatingId === counselor.id}
+                                            onClick={() => handleStatusChange(counsellor.id, 'approved')}
+                                            disabled={updatingId === counsellor.id}
                                             className="px-4 py-2 text-sm font-medium rounded-lg bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 hover:bg-green-100 dark:hover:bg-green-900/40 border border-green-200 dark:border-green-900/30 transition-colors disabled:opacity-50"
                                         >
-                                            {updatingId === counselor.id ? (
+                                            {updatingId === counsellor.id ? (
                                                 <Loader2 className="w-4 h-4 animate-spin" />
                                             ) : (
                                                 'Approve'
@@ -273,13 +273,13 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                                         </button>
                                     )}
 
-                                    {counselor.status !== 'pending' && (
+                                    {counsellor.status !== 'pending' && (
                                         <button
-                                            onClick={() => handleStatusChange(counselor.id, 'pending')}
-                                            disabled={updatingId === counselor.id}
+                                            onClick={() => handleStatusChange(counsellor.id, 'pending')}
+                                            disabled={updatingId === counsellor.id}
                                             className="px-4 py-2 text-sm font-medium rounded-lg bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 hover:bg-amber-100 dark:hover:bg-amber-900/40 border border-amber-200 dark:border-amber-900/30 transition-colors disabled:opacity-50"
                                         >
-                                            {updatingId === counselor.id ? (
+                                            {updatingId === counsellor.id ? (
                                                 <Loader2 className="w-4 h-4 animate-spin" />
                                             ) : (
                                                 'Set Pending'
@@ -287,13 +287,13 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                                         </button>
                                     )}
 
-                                    {counselor.status !== 'blocked' && (
+                                    {counsellor.status !== 'blocked' && (
                                         <button
-                                            onClick={() => handleStatusChange(counselor.id, 'blocked')}
-                                            disabled={updatingId === counselor.id}
+                                            onClick={() => handleStatusChange(counsellor.id, 'blocked')}
+                                            disabled={updatingId === counsellor.id}
                                             className="px-4 py-2 text-sm font-medium rounded-lg bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/40 border border-red-200 dark:border-red-900/30 transition-colors disabled:opacity-50"
                                         >
-                                            {updatingId === counselor.id ? (
+                                            {updatingId === counsellor.id ? (
                                                 <Loader2 className="w-4 h-4 animate-spin" />
                                             ) : (
                                                 'Block'

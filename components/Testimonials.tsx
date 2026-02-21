@@ -3,12 +3,12 @@ import { Quote } from 'lucide-react';
 
 const STORIES = [
   {
-    text: "I always thought counseling was only for 'big' problems. But talking about my exam anxiety helped me realize I was just burning out. I sleep so much better now.",
+    text: "I always thought counselling was only for 'big' problems. But talking about my exam anxiety helped me realize I was just burning out. I sleep so much better now.",
     tag: "Third Year Student",
     color: "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300"
   },
   {
-    text: "I was terrified that my teachers would find out. The counselor assured me it was private, and she kept her word. It's the one place I can be completely honest.",
+    text: "I was terrified that my teachers would find out. The counsellor assured me it was private, and she kept her word. It's the one place I can be completely honest.",
     tag: "Computer Engg. Student",
     color: "bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300"
   },
@@ -23,7 +23,7 @@ const STORIES = [
     color: "bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300"
   },
   {
-    text: "The counselor didn't give me solutions. She helped me find my own. That's what made the difference — I felt empowered, not dependent.",
+    text: "The counsellor didn't give me solutions. She helped me find my own. That's what made the difference — I felt empowered, not dependent.",
     tag: "Second Year Student",
     color: "bg-teal-50 dark:bg-teal-900/20 text-teal-700 dark:text-teal-300"
   },

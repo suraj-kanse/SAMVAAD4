@@ -39,7 +39,7 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true, lowercase: true, trim: true },
   password: { type: String, required: true },
   name: { type: String, required: true, trim: true },
-  role: { type: String, enum: ['admin', 'counselor'], required: true },
+  role: { type: String, enum: ['admin', 'counsellor'], required: true },
   status: { type: String, enum: ['pending', 'approved', 'blocked'], default: 'pending' },
   createdAt: { type: Date, default: Date.now }
 });

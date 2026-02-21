@@ -125,7 +125,7 @@ export const ActionCenter: React.FC = () => {
             <GreetingIcon className="w-6 h-6" />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-stone-800 dark:text-white tracking-tight">{greeting}, Counselor</h2>
+            <h2 className="text-2xl font-bold text-stone-800 dark:text-white tracking-tight">{greeting}, Counsellor</h2>
             <p className="text-stone-500 dark:text-stone-400 mt-1 font-medium">
               You have {inProgressRequests.length} session{inProgressRequests.length !== 1 ? 's' : ''} in progress and {scheduledRequests.length} scheduled.
             </p>

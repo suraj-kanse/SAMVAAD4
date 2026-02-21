@@ -106,9 +106,9 @@ const roleMiddleware = (...roles) => {
   };
 };
 
-// Counselor must be approved to access protected routes
+// Counsellor must be approved to access protected routes
 const approvedOnly = async (req, res, next) => {
-  if (req.user.role === 'counselor') {
+  if (req.user.role === 'counsellor') {
     try {
       const user = await User.findById(req.user.userId);
       if (!user) {
@@ -130,7 +130,7 @@ const approvedOnly = async (req, res, next) => {
 // AUTH ROUTES
 // ============================================================
 
-// POST /api/auth/register — Counselor self-registration
+// POST /api/auth/register — Counsellor self-registration
 app.post('/api/auth/register', async (req, res) => {
   try {
     const { email, password, name } = req.body;
@@ -155,7 +155,7 @@ app.post('/api/auth/register', async (req, res) => {
       email: email.toLowerCase().trim(),
       password: hashedPassword,
       name: name.trim(),
-      role: 'counselor',
+      role: 'counsellor',
       status: 'pending'
     });
 
@@ -171,7 +171,7 @@ app.post('/api/auth/register', async (req, res) => {
   }
 });
 
-// POST /api/auth/login — Login for both admin and counselor
+// POST /api/auth/login — Login for both admin and counsellor
 app.post('/api/auth/login', async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -190,8 +190,8 @@ app.post('/api/auth/login', async (req, res) => {
       return res.status(401).json({ error: 'Invalid email or password.' });
     }
 
-    // Check if counselor is blocked
-    if (user.role === 'counselor' && user.status === 'blocked') {
+    // Check if counsellor is blocked
+    if (user.role === 'counsellor' && user.status === 'blocked') {
       return res.status(403).json({ error: 'Your account has been blocked by the admin.' });
     }
 
@@ -241,11 +241,11 @@ app.get('/api/auth/me', authMiddleware, async (req, res) => {
 // ADMIN ROUTES (Admin only)
 // ============================================================
 
-// GET /api/admin/counselors — List all counselors
-app.get('/api/admin/counselors', authMiddleware, roleMiddleware('admin'), async (req, res) => {
+// GET /api/admin/counsellors — List all counsellors
+app.get('/api/admin/counsellors', authMiddleware, roleMiddleware('admin'), async (req, res) => {
   try {
-    const counselors = await User.find({ role: 'counselor' }).select('-password').sort({ createdAt: -1 });
-    res.json(counselors.map(c => ({
+    const counsellors = await User.find({ role: 'counsellor' }).select('-password').sort({ createdAt: -1 });
+    res.json(counsellors.map(c => ({
       id: c._id.toString(),
       email: c.email,
       name: c.name,
@@ -257,27 +257,27 @@ app.get('/api/admin/counselors', authMiddleware, roleMiddleware('admin'), async 
   }
 });
 
-// PATCH /api/admin/counselors/:id — Approve or block a counselor
-app.patch('/api/admin/counselors/:id', authMiddleware, roleMiddleware('admin'), async (req, res) => {
+// PATCH /api/admin/counsellors/:id — Approve or block a counsellor
+app.patch('/api/admin/counsellors/:id', authMiddleware, roleMiddleware('admin'), async (req, res) => {
   try {
     const { status } = req.body;
     if (!['approved', 'blocked', 'pending'].includes(status)) {
       return res.status(400).json({ error: 'Invalid status. Must be approved, blocked, or pending.' });
     }
 
-    const counselor = await User.findById(req.params.id);
-    if (!counselor || counselor.role !== 'counselor') {
-      return res.status(404).json({ error: 'Counselor not found.' });
+    const counsellor = await User.findById(req.params.id);
+    if (!counsellor || counsellor.role !== 'counsellor') {
+      return res.status(404).json({ error: 'Counsellor not found.' });
     }
 
-    counselor.status = status;
-    await counselor.save();
+    counsellor.status = status;
+    await counsellor.save();
 
     res.json({
-      id: counselor._id.toString(),
-      email: counselor.email,
-      name: counselor.name,
-      status: counselor.status
+      id: counsellor._id.toString(),
+      email: counsellor.email,
+      name: counsellor.name,
+      status: counsellor.status
     });
   } catch (e) {
     res.status(500).json({ error: e.message });
@@ -285,10 +285,10 @@ app.patch('/api/admin/counselors/:id', authMiddleware, roleMiddleware('admin'), 
 });
 
 // ============================================================
-// PROTECTED ROUTES — Requests (Counselor-only, except POST which is public)
+// PROTECTED ROUTES — Requests (Counsellor-only, except POST which is public)
 // ============================================================
 
-app.get('/api/requests', authMiddleware, roleMiddleware('counselor'), approvedOnly, async (req, res) => {
+app.get('/api/requests', authMiddleware, roleMiddleware('counsellor'), approvedOnly, async (req, res) => {
   try {
     const requests = await Request.find().sort({ timestamp: -1 });
     res.json(requests.map(mapId));
@@ -308,7 +308,7 @@ app.post('/api/requests', async (req, res) => {
   }
 });
 
-app.patch('/api/requests/:id', authMiddleware, roleMiddleware('counselor'), approvedOnly, async (req, res) => {
+app.patch('/api/requests/:id', authMiddleware, roleMiddleware('counsellor'), approvedOnly, async (req, res) => {
   try {
     const { status } = req.body;
     await Request.findByIdAndUpdate(req.params.id, { status });
@@ -319,10 +319,10 @@ app.patch('/api/requests/:id', authMiddleware, roleMiddleware('counselor'), appr
 });
 
 // ============================================================
-// PROTECTED ROUTES — Students (Counselor-only)
+// PROTECTED ROUTES — Students (Counsellor-only)
 // ============================================================
 
-app.get('/api/students', authMiddleware, roleMiddleware('counselor'), approvedOnly, async (req, res) => {
+app.get('/api/students', authMiddleware, roleMiddleware('counsellor'), approvedOnly, async (req, res) => {
   try {
     const students = await Student.find().sort({ joinedAt: -1 });
     res.json(students.map(mapId));
@@ -331,7 +331,7 @@ app.get('/api/students', authMiddleware, roleMiddleware('counselor'), approvedOn
   }
 });
 
-app.get('/api/students/:id', authMiddleware, roleMiddleware('counselor'), approvedOnly, async (req, res) => {
+app.get('/api/students/:id', authMiddleware, roleMiddleware('counsellor'), approvedOnly, async (req, res) => {
   try {
     const student = await Student.findById(req.params.id);
     res.json(mapId(student));
@@ -340,7 +340,7 @@ app.get('/api/students/:id', authMiddleware, roleMiddleware('counselor'), approv
   }
 });
 
-app.post('/api/students', authMiddleware, roleMiddleware('counselor'), approvedOnly, async (req, res) => {
+app.post('/api/students', authMiddleware, roleMiddleware('counsellor'), approvedOnly, async (req, res) => {
   try {
     const exists = await Student.findOne({ mobile: req.body.mobile });
     if (exists) return res.status(400).json({ error: 'Student already exists' });
@@ -353,7 +353,7 @@ app.post('/api/students', authMiddleware, roleMiddleware('counselor'), approvedO
   }
 });
 
-app.delete('/api/students/:id', authMiddleware, roleMiddleware('counselor'), approvedOnly, async (req, res) => {
+app.delete('/api/students/:id', authMiddleware, roleMiddleware('counsellor'), approvedOnly, async (req, res) => {
   try {
     const student = await Student.findByIdAndDelete(req.params.id);
     if (!student) {
@@ -368,10 +368,10 @@ app.delete('/api/students/:id', authMiddleware, roleMiddleware('counselor'), app
 });
 
 // ============================================================
-// PROTECTED ROUTES — Sessions (Counselor-only)
+// PROTECTED ROUTES — Sessions (Counsellor-only)
 // ============================================================
 
-app.get('/api/sessions', authMiddleware, roleMiddleware('counselor'), approvedOnly, async (req, res) => {
+app.get('/api/sessions', authMiddleware, roleMiddleware('counsellor'), approvedOnly, async (req, res) => {
   try {
     const { studentId } = req.query;
     const query = studentId ? { studentId } : {};
@@ -382,7 +382,7 @@ app.get('/api/sessions', authMiddleware, roleMiddleware('counselor'), approvedOn
   }
 });
 
-app.post('/api/sessions', authMiddleware, roleMiddleware('counselor'), approvedOnly, async (req, res) => {
+app.post('/api/sessions', authMiddleware, roleMiddleware('counsellor'), approvedOnly, async (req, res) => {
   try {
     const session = new Session(req.body);
     await session.save();
@@ -404,18 +404,18 @@ app.post('/api/whatsapp/send', async (req, res) => {
       return res.status(400).json({ error: 'Phone number is required' });
     }
 
-    const message = `Hello, I would like to connect with a counselor.\n\nMy Details:\nName: ${name || 'Not provided'}\nPhone: ${phone}\nDepartment: ${department || 'Not provided'}\nGender: ${gender || 'Not provided'}\nConcern: ${issue || 'Not provided'}`;
+    const message = `Hello, I would like to connect with a counsellor.\n\nMy Details:\nName: ${name || 'Not provided'}\nPhone: ${phone}\nDepartment: ${department || 'Not provided'}\nGender: ${gender || 'Not provided'}\nConcern: ${issue || 'Not provided'}`;
 
     // Check for credentials
     const token = process.env.WHATSAPP_API_TOKEN;
     const phoneId = process.env.WHATSAPP_PHONE_NUMBER_ID;
 
     if (token && phoneId) {
-      console.log(`🚀 Sending WhatsApp to Counselor (8010777641) about user: ${name}, ${phone}`);
+      console.log(`🚀 Sending WhatsApp to Counsellor (8010777641) about user: ${name}, ${phone}`);
     } else {
       console.log("---------------------------------------------------");
       console.log("📨 SIMULATED WHATSAPP MESSAGE (No Credentials Found)");
-      console.log(`To: Counselor (8010777641)`);
+      console.log(`To: Counsellor (8010777641)`);
       console.log(`Message: \n${message}`);
       console.log("---------------------------------------------------");
     }

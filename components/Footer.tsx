@@ -4,13 +4,13 @@ import { Github, Linkedin, Mail } from 'lucide-react';
 interface FooterProps {
     onHomeClick: () => void;
     onAboutClick: () => void;
-    onMeetCounselorClick: () => void;
+    onMeetCounsellorClick: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
     onHomeClick,
     onAboutClick,
-    onMeetCounselorClick
+    onMeetCounsellorClick
 }) => {
     const currentYear = new Date().getFullYear();
 
@@ -23,7 +23,7 @@ export const Footer: React.FC<FooterProps> = ({
 
                     {/* Brand Column */}
                     <div>
-                        <h3 className="text-white font-bold text-lg mb-3 tracking-tight">Counseling Centre</h3>
+                        <h3 className="text-white font-bold text-lg mb-3 tracking-tight">Counselling Centre</h3>
                         <p className="text-stone-400 text-sm leading-relaxed mb-4">
                             A safe, confidential space for AVCOE students & staff — because reaching out should never feel hard.
                         </p>
@@ -67,7 +67,7 @@ export const Footer: React.FC<FooterProps> = ({
                                 Home
                             </button>
                             <button
-                                onClick={onMeetCounselorClick}
+                                onClick={onMeetCounsellorClick}
                                 className="text-stone-400 hover:text-white text-sm text-left transition-colors duration-200"
                             >
                                 Meet the Counsellor
@@ -89,7 +89,7 @@ export const Footer: React.FC<FooterProps> = ({
                             <p>Amrutvahini College of Engineering</p>
                             <p>Amrutnagar, Sangamner</p>
                             <a
-                                href={`mailto:surajkanse88@gmail.com?subject=${encodeURIComponent('I have some suggestions for your website')}&body=${encodeURIComponent(`I was going through your platform 'Counseling Centre, AVCOE'.\nI feel these things about it—\n\nThings I liked:\n\n\nI have some suggestions:\n\n\nThings I didn't like:\n\n`)}`}
+                                href={`mailto:surajkanse88@gmail.com?subject=${encodeURIComponent('I have some suggestions for your website')}&body=${encodeURIComponent(`I was going through your platform 'Counselling Centre, AVCOE'.\nI feel these things about it—\n\nThings I liked:\n\n\nI have some suggestions:\n\n\nThings I didn't like:\n\n`)}`}
                                 className="inline-flex items-center gap-1.5 text-[#6ccca2] hover:text-[#7abfa1] transition-colors duration-200"
                             >
                                 <Mail className="w-3.5 h-3.5" />
@@ -104,7 +104,7 @@ export const Footer: React.FC<FooterProps> = ({
 
                 <div className="py-6 flex items-center justify-center">
                     <p className="text-xs text-stone-500">
-                        © {currentYear} Counseling Centre, AVCOE. All rights reserved.
+                        © {currentYear} Counselling Centre, AVCOE. All rights reserved.
                     </p>
                 </div>
             </div>

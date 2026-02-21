@@ -3,28 +3,28 @@ import { Award, BookHeart, GraduationCap, Quote, Lock, FileX, Shield, MessageCir
 import { Navbar } from './Navbar';
 import { Footer } from './Footer';
 
-interface CounselorPageProps {
+interface CounsellorPageProps {
     onHomeClick: () => void;
     onAboutClick: () => void;
     isDark: boolean;
     onThemeToggle: () => void;
 }
 
-export const CounselorPage: React.FC<CounselorPageProps> = ({
+export const CounsellorPage: React.FC<CounsellorPageProps> = ({
     onHomeClick,
     onAboutClick,
     isDark,
     onThemeToggle
 }) => {
     useEffect(() => {
-        document.title = "Counselor | Samvaad";
+        document.title = "Counsellor | Samvaad";
         const metaDescription = document.querySelector('meta[name="description"]');
         if (metaDescription) {
-            metaDescription.setAttribute("content", "Meet Dr. Maya Patil, Student Counselor at Samvaad. Book a confidential counseling session today.");
+            metaDescription.setAttribute("content", "Meet Dr. Maya Patil, Student Counsellor at Samvaad. Book a confidential counselling session today.");
         } else {
             const meta = document.createElement('meta');
             meta.name = "description";
-            meta.content = "Meet Dr. Maya Patil, Student Counselor at Samvaad. Book a confidential counseling session today.";
+            meta.content = "Meet Dr. Maya Patil, Student Counsellor at Samvaad. Book a confidential counselling session today.";
             document.head.appendChild(meta);
         }
     }, []);
@@ -35,10 +35,10 @@ export const CounselorPage: React.FC<CounselorPageProps> = ({
             <Navbar
                 onHomeClick={onHomeClick}
                 onAboutClick={onAboutClick}
-                onMeetCounselorClick={() => { }} // Already on Counselor page
+                onMeetCounsellorClick={() => { }} // Already on Counsellor page
                 isDark={isDark}
                 onThemeToggle={onThemeToggle}
-                activePage="counselor"
+                activePage="counsellor"
             />
 
             <main className="max-w-4xl mx-auto px-4 pt-28 pb-20 animate-fade-in">
@@ -47,7 +47,7 @@ export const CounselorPage: React.FC<CounselorPageProps> = ({
                     <div className="w-full md:w-1/3 flex flex-col items-center">
                         <div className="w-64 h-64 rounded-[2rem] overflow-hidden shadow-xl border-4 border-white dark:border-stone-800 mb-6 relative group bg-stone-200 dark:bg-stone-800">
                             <img
-                                src="/images/counselor.jpg"
+                                src="/images/counsellor.jpg"
                                 alt="Dr. Maya Patil"
                                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                             />
@@ -58,13 +58,13 @@ export const CounselorPage: React.FC<CounselorPageProps> = ({
 
                             <div className="mt-6 md:hidden w-full">
                                 <a
-                                    href="https://wa.me/918698801090?text=Hello,%20I%20would%20like%20to%20speak%20with%20a%20student%20counselor."
+                                    href="https://wa.me/918698801090?text=Hello,%20I%20would%20like%20to%20speak%20with%20a%20student%20counsellor."
                                     target="_blank"
                                     rel="noreferrer"
                                     className="w-full py-3 px-6 bg-[#4a8067] hover:bg-[#3d6b56] text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all hover:-translate-y-0.5 flex items-center justify-center gap-2 group"
                                 >
                                     <MessageCircle className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                                    Talk to Counselor
+                                    Talk to Counsellor
                                 </a>
                             </div>
 
@@ -75,13 +75,13 @@ export const CounselorPage: React.FC<CounselorPageProps> = ({
 
                             <div className="mt-8 w-full hidden md:block">
                                 <a
-                                    href="https://wa.me/918698801090?text=Hello,%20I%20would%20like%20to%20speak%20with%20a%20student%20counselor."
+                                    href="https://wa.me/918698801090?text=Hello,%20I%20would%20like%20to%20speak%20with%20a%20student%20counsellor."
                                     target="_blank"
                                     rel="noreferrer"
                                     className="w-full py-3 px-6 bg-[#4a8067] hover:bg-[#3d6b56] text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all hover:-translate-y-0.5 flex items-center justify-center gap-2 group"
                                 >
                                     <MessageCircle className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                                    Talk to Counselor
+                                    Talk to Counsellor
                                 </a>
                             </div>
                         </div>
@@ -126,7 +126,7 @@ export const CounselorPage: React.FC<CounselorPageProps> = ({
                                     </div>
                                     <h4 className="font-semibold text-stone-800 dark:text-white">Specialization</h4>
                                 </div>
-                                <p className="text-sm text-stone-500 dark:text-stone-400 leading-relaxed">Anxiety disorders, Academic stress management, and Career counseling.</p>
+                                <p className="text-sm text-stone-500 dark:text-stone-400 leading-relaxed">Anxiety disorders, Academic stress management, and Career counselling.</p>
                             </div>
                         </div>
                     </div>
@@ -158,7 +158,7 @@ export const CounselorPage: React.FC<CounselorPageProps> = ({
                             </div>
                             <div>
                                 <h3 className="text-xl font-bold text-stone-900 dark:text-white mb-2">Nothing goes on your record</h3>
-                                <p className="text-stone-500 dark:text-stone-400 leading-relaxed">Counseling is entirely separate from your academic file. It won't appear anywhere, ever.</p>
+                                <p className="text-stone-500 dark:text-stone-400 leading-relaxed">Counselling is entirely separate from your academic file. It won't appear anywhere, ever.</p>
                             </div>
                         </div>
                         {/* Card 3 */}
@@ -179,7 +179,7 @@ export const CounselorPage: React.FC<CounselorPageProps> = ({
                     <div className="text-center mb-12">
                         <h2 className="text-3xl font-bold text-stone-900 dark:text-white mb-4">My Approach</h2>
                         <p className="text-lg text-stone-500 dark:text-stone-400 max-w-2xl mx-auto">
-                            What I believe about counseling and supporting students.
+                            What I believe about counselling and supporting students.
                         </p>
                     </div>
                     <div className="space-y-4">
@@ -204,7 +204,7 @@ export const CounselorPage: React.FC<CounselorPageProps> = ({
             <Footer
                 onHomeClick={onHomeClick}
                 onAboutClick={onAboutClick}
-                onMeetCounselorClick={() => { }}
+                onMeetCounsellorClick={() => { }}
             />
 
         </div>

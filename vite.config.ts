@@ -8,7 +8,7 @@ export default defineConfig(({ mode }) => {
     server: {
       port: 3000,
       host: '0.0.0.0',
-      allowedHosts: ['counseling-centre-avcoe.onrender.com'],
+      allowedHosts: ['counselling-centre-avcoe.onrender.com'],
     },
     plugins: [react()],
     define: {

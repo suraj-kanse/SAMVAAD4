@@ -4,16 +4,16 @@ import { Sun, Moon, Menu, X } from 'lucide-react';
 interface NavbarProps {
   onHomeClick: () => void;
   onAboutClick: () => void;
-  onMeetCounselorClick: () => void;
+  onMeetCounsellorClick: () => void;
   isDark: boolean;
   onThemeToggle: () => void;
-  activePage: 'home' | 'about' | 'counselor';
+  activePage: 'home' | 'about' | 'counsellor';
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
   onHomeClick,
   onAboutClick,
-  onMeetCounselorClick,
+  onMeetCounsellorClick,
   isDark,
   onThemeToggle,
   activePage
@@ -31,7 +31,7 @@ export const Navbar: React.FC<NavbarProps> = ({
       {/* Mobile Header */}
       <div className="md:hidden fixed inset-x-0 top-0 h-16 bg-white/90 dark:bg-[#1a1c1a]/90 backdrop-blur-md border-b border-stone-200/50 dark:border-white/5 flex items-center justify-between px-4 z-[100] transition-colors duration-300">
         <button onClick={() => handleNav(onHomeClick)} className="text-lg font-bold text-stone-800 dark:text-white tracking-tight">
-          Counseling
+          Counselling
         </button>
         <div className="flex items-center gap-3">
           <button
@@ -57,11 +57,11 @@ export const Navbar: React.FC<NavbarProps> = ({
               onClick={() => handleNav(onHomeClick)}
               className={`p-4 text-left text-lg font-medium rounded-xl transition-colors ${activePage === 'home' ? 'bg-stone-100 dark:bg-stone-800 text-stone-900 dark:text-white' : 'hover:bg-stone-50 dark:hover:bg-stone-800/50 text-stone-600 dark:text-stone-300'}`}
             >
-              Counseling
+              Counselling
             </button>
             <button
-              onClick={() => handleNav(onMeetCounselorClick)}
-              className={`p-4 text-left text-lg font-medium rounded-xl transition-colors ${activePage === 'counselor' ? 'bg-stone-100 dark:bg-stone-800 text-stone-900 dark:text-white' : 'hover:bg-stone-50 dark:hover:bg-stone-800/50 text-stone-600 dark:text-stone-300'}`}
+              onClick={() => handleNav(onMeetCounsellorClick)}
+              className={`p-4 text-left text-lg font-medium rounded-xl transition-colors ${activePage === 'counsellor' ? 'bg-stone-100 dark:bg-stone-800 text-stone-900 dark:text-white' : 'hover:bg-stone-50 dark:hover:bg-stone-800/50 text-stone-600 dark:text-stone-300'}`}
             >
               Meet the Counsellor
             </button>
@@ -83,12 +83,12 @@ export const Navbar: React.FC<NavbarProps> = ({
             onClick={onHomeClick}
             className={`px-5 py-2.5 rounded-full font-medium text-sm transition-colors ${activePage === 'home' ? 'bg-stone-900 dark:bg-white text-white dark:text-stone-900 shadow-sm' : 'text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-white/10 hover:text-stone-900 dark:hover:text-white'}`}
           >
-            Counseling
+            Counselling
           </button>
 
           <button
-            onClick={onMeetCounselorClick}
-            className={`px-5 py-2.5 rounded-full font-medium text-sm transition-colors ${activePage === 'counselor' ? 'bg-stone-900 dark:bg-white text-white dark:text-stone-900 shadow-sm' : 'text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-white/10 hover:text-stone-900 dark:hover:text-white'}`}
+            onClick={onMeetCounsellorClick}
+            className={`px-5 py-2.5 rounded-full font-medium text-sm transition-colors ${activePage === 'counsellor' ? 'bg-stone-900 dark:bg-white text-white dark:text-stone-900 shadow-sm' : 'text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-white/10 hover:text-stone-900 dark:hover:text-white'}`}
           >
             Meet the Counsellor
           </button>

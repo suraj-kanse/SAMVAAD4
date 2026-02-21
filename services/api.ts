@@ -1,4 +1,4 @@
-import { StudentRequest, RequestStatus, Student, Session, AuthUser, Counselor } from '../types';
+import { StudentRequest, RequestStatus, Student, Session, AuthUser, Counsellor } from '../types';
 
 // Use relative URLs so it works on both local dev and deployment
 const BASE_URL = (import.meta as any).env?.VITE_API_URL || '';
@@ -104,28 +104,28 @@ export const logout = async (): Promise<void> => {
 // ADMIN API
 // ============================================================
 
-export const getCounselors = async (): Promise<Counselor[]> => {
+export const getCounsellors = async (): Promise<Counsellor[]> => {
   try {
-    return await fetchApi<Counselor[]>('/admin/counselors');
+    return await fetchApi<Counsellor[]>('/admin/counsellors');
   } catch (e: any) {
     if (isOfflineError(e)) {
-      console.warn('Backend offline: Returning empty counselors list');
+      console.warn('Backend offline: Returning empty counsellors list');
       return Promise.resolve([]);
     }
     throw e;
   }
 };
 
-export const updateCounselorStatus = async (id: string, status: string): Promise<Counselor> => {
+export const updateCounsellorStatus = async (id: string, status: string): Promise<Counsellor> => {
   try {
-    return await fetchApi<Counselor>(`/admin/counselors/${id}`, {
+    return await fetchApi<Counsellor>(`/admin/counsellors/${id}`, {
       method: 'PATCH',
       body: JSON.stringify({ status })
     });
   } catch (e: any) {
     if (isOfflineError(e)) {
-      console.warn('Backend offline: Faking counselor status update');
-      return Promise.resolve({ id, status, name: 'Offline Counselor', email: 'offline@samvaad', createdAt: new Date().toISOString() } as Counselor);
+      console.warn('Backend offline: Faking counsellor status update');
+      return Promise.resolve({ id, status, name: 'Offline Counsellor', email: 'offline@samvaad', createdAt: new Date().toISOString() } as Counsellor);
     }
     throw e;
   }

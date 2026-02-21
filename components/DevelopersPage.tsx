@@ -43,7 +43,7 @@ export const DevelopersPage: React.FC<DevelopersPageProps> = ({ onBack }) => {
           </div>
           <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-4">Meet the Builders</h1>
           <p className="text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
-            The minds behind the Student Counseling platform. We are a group of students dedicated to making mental health support accessible to everyone on campus through technology.
+            The minds behind the Student Counselling platform. We are a group of students dedicated to making mental health support accessible to everyone on campus through technology.
           </p>
         </div>
 

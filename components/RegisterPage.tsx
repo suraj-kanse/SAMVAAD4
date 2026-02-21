@@ -115,7 +115,7 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({
                         <div className="w-14 h-14 mx-auto bg-teal-100 dark:bg-teal-900/40 rounded-xl flex items-center justify-center mb-4">
                             <UserPlus className="w-7 h-7 text-teal-600 dark:text-teal-400" />
                         </div>
-                        <h1 className="text-2xl font-bold text-slate-800 dark:text-white">Counselor Registration</h1>
+                        <h1 className="text-2xl font-bold text-slate-800 dark:text-white">Counsellor Registration</h1>
                         <p className="text-slate-500 dark:text-slate-400 mt-1 text-sm">Create your account to get started</p>
                     </div>
 

@@ -25,7 +25,7 @@ const PROBLEMS: Problem[] = [
     id: '3',
     text: "Stress & Anxiety",
     description: "Feeling constantly on edge, racing heart, or unable to relax. Stress is your body's alarm system stuck in the 'on' position.",
-    solution: "Reset your nervous system with deep breathing (4-7-8 technique), physical movement, or talking to a counselor to identify triggers."
+    solution: "Reset your nervous system with deep breathing (4-7-8 technique), physical movement, or talking to a counsellor to identify triggers."
   },
   {
     id: '4',
@@ -67,7 +67,7 @@ const PROBLEMS: Problem[] = [
     id: '10',
     text: "Other Struggles",
     description: "Facing something not listed here? Grief, trauma, financial stress, or just feeling 'off' without a name for it.",
-    solution: "Your struggle is valid, even if it doesn't have a label. The counseling centre is a safe space for *anything* that's on your mind."
+    solution: "Your struggle is valid, even if it doesn't have a label. The counselling centre is a safe space for *anything* that's on your mind."
   }
 ];
 
@@ -173,7 +173,7 @@ export const MarqueeWall: React.FC = () => {
                     className="w-full py-4 bg-[#cc6b3e] hover:bg-[#b55d34] text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all hover:-translate-y-0.5 flex items-center justify-center gap-2 group"
                   >
                     <MessageCircle className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                    Talk to Counselor about this
+                    Talk to Counsellor about this
                   </a>
                 </div>
               </div>

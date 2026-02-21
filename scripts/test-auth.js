@@ -7,15 +7,15 @@ const API_URL = 'http://localhost:5000/api';
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
 const ADMIN_PASS = process.env.ADMIN_PASS;
 
-const TEST_COUNSELOR = {
-    name: 'Test Counselor',
-    email: `test.counselor.${Date.now()}@avcoe.edu`,
+const TEST_COUNSELLOR = {
+    name: 'Test Counsellor',
+    email: `test.counsellor.${Date.now()}@avcoe.edu`,
     password: 'password123',
-    role: 'counselor'
+    role: 'counsellor'
 };
 
 let adminToken = '';
-let counselorId = '';
+let counsellorId = '';
 
 async function runTests() {
     console.log('🚀 Starting Authentication Verification...\n');
@@ -35,61 +35,61 @@ async function runTests() {
             throw new Error('Admin login failed or incorrect role');
         }
 
-        // 2. Test Counselor Registration
-        console.log('\n2️⃣  Testing Counselor Registration...');
-        const register = await axios.post(`${API_URL}/auth/register`, TEST_COUNSELOR);
+        // 2. Test Counsellor Registration
+        console.log('\n2️⃣  Testing Counsellor Registration...');
+        const register = await axios.post(`${API_URL}/auth/register`, TEST_COUNSELLOR);
         if (register.data.success) {
-            console.log('✅ Counselor Registration Successful');
+            console.log('✅ Counsellor Registration Successful');
         } else {
-            throw new Error('Counselor registration failed');
+            throw new Error('Counsellor registration failed');
         }
 
-        // 3. Test Counselor Login (Should FAIL before approval)
-        console.log('\n3️⃣  Testing Counselor Login (Pre-Approval)...');
+        // 3. Test Counsellor Login (Should FAIL before approval)
+        console.log('\n3️⃣  Testing Counsellor Login (Pre-Approval)...');
         try {
             await axios.post(`${API_URL}/auth/login`, {
-                email: TEST_COUNSELOR.email,
-                password: TEST_COUNSELOR.password
+                email: TEST_COUNSELLOR.email,
+                password: TEST_COUNSELLOR.password
             });
-            throw new Error('❌ Counselor should NOT be able to login before approval!');
+            throw new Error('❌ Counsellor should NOT be able to login before approval!');
         } catch (err) {
             if (err.response && err.response.status === 403) {
-                console.log('✅ Counselor Login blocked as expected (Account pending approval)');
+                console.log('✅ Counsellor Login blocked as expected (Account pending approval)');
             } else {
                 throw err;
             }
         }
 
-        // 4. Test Admin Approving Counselor
+        // 4. Test Admin Approving Counsellor
         // First, we need to find the user ID. Since we don't have a token system implemented strictly in this mocked server,
         // we assume the API is open or we use the Admin to fetch users.
         // Looking at server.cjs, GET /api/users is unprotected (for simplicity in this project phase)
-        console.log('\n4️⃣  Fetching Users to find new Counselor...');
+        console.log('\n4️⃣  Fetching Users to find new Counsellor...');
         const users = await axios.get(`${API_URL}/users`);
-        const newCounselor = users.data.find(u => u.email === TEST_COUNSELOR.email);
+        const newCounsellor = users.data.find(u => u.email === TEST_COUNSELLOR.email);
 
-        if (newCounselor) {
-            counselorId = newCounselor.id;
-            console.log(`✅ Found new counselor ID: ${counselorId}`);
+        if (newCounsellor) {
+            counsellorId = newCounsellor.id;
+            console.log(`✅ Found new counsellor ID: ${counsellorId}`);
 
-            console.log('🔄 Approving Counselor...');
-            await axios.patch(`${API_URL}/users/${counselorId}/status`, { isApproved: true });
-            console.log('✅ Counselor Approved by Admin');
+            console.log('🔄 Approving Counsellor...');
+            await axios.patch(`${API_URL}/users/${counsellorId}/status`, { isApproved: true });
+            console.log('✅ Counsellor Approved by Admin');
         } else {
-            throw new Error('Could not find registered counselor in database');
+            throw new Error('Could not find registered counsellor in database');
         }
 
-        // 5. Test Counselor Login (Should SUCCEED after approval)
-        console.log('\n5️⃣  Testing Counselor Login (Post-Approval)...');
-        const counselorLogin = await axios.post(`${API_URL}/auth/login`, {
-            email: TEST_COUNSELOR.email,
-            password: TEST_COUNSELOR.password
+        // 5. Test Counsellor Login (Should SUCCEED after approval)
+        console.log('\n5️⃣  Testing Counsellor Login (Post-Approval)...');
+        const counsellorLogin = await axios.post(`${API_URL}/auth/login`, {
+            email: TEST_COUNSELLOR.email,
+            password: TEST_COUNSELLOR.password
         });
 
-        if (counselorLogin.data && counselorLogin.data.role === 'counselor') {
-            console.log('✅ Counselor Login Successful');
+        if (counsellorLogin.data && counsellorLogin.data.role === 'counsellor') {
+            console.log('✅ Counsellor Login Successful');
         } else {
-            throw new Error('Counselor login failed after approval');
+            throw new Error('Counsellor login failed after approval');
         }
 
         // 6. Test Google Auth Endpoint (Availability Check)

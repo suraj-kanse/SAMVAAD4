@@ -71,9 +71,9 @@ export const LoginPage: React.FC<LoginPageProps> = ({
                 return;
             }
 
-            // For counselor login, verify role is counselor
-            if (role === 'counselor' && result.user.role !== 'counselor') {
-                setError('This login is for counselors only. Please use the admin login.');
+            // For counsellor login, verify role is counsellor
+            if (role === 'counsellor' && result.user.role !== 'counsellor') {
+                setError('This login is for counsellors only. Please use the admin login.');
                 setIsLoading(false);
                 return;
             }
@@ -103,9 +103,9 @@ export const LoginPage: React.FC<LoginPageProps> = ({
     };
 
     const isAdmin = role === 'admin';
-    const title = isAdmin ? 'Admin Login' : 'Counselor Login';
+    const title = isAdmin ? 'Admin Login' : 'Counsellor Login';
     const subtitle = isAdmin
-        ? 'Sign in to manage counselor access'
+        ? 'Sign in to manage counsellor access'
         : 'Sign in to access your dashboard';
 
     return (
@@ -234,7 +234,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
                         </button>
                     </form>
 
-                    {/* Register link (counselor only) */}
+                    {/* Register link (counsellor only) */}
                     {!isAdmin && onRegisterClick && (
                         <div className="mt-6 pt-6 border-t border-slate-200 dark:border-slate-700 text-center">
                             <p className="text-sm text-slate-500 dark:text-slate-400">

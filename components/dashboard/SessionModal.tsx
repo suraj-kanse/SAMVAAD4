@@ -28,8 +28,8 @@ export const SessionModal: React.FC<SessionModalProps> = ({ studentId, onClose, 
     const newSession: Session = {
       id: '', // Backend will generate ID
       studentId,
-      // counselorId, // Removed
-      // counselorName, // Removed
+      // counsellorId, // Removed
+      // counsellorName, // Removed
       topic,
       problems,
       feedback,
@@ -103,7 +103,7 @@ export const SessionModal: React.FC<SessionModalProps> = ({ studentId, onClose, 
           {/* Private Note */}
           <div>
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
-              Private Note <span className="text-slate-400 font-normal">(Only visible to counselors)</span>
+              Private Note <span className="text-slate-400 font-normal">(Only visible to counsellors)</span>
             </label>
             <textarea
               rows={2}

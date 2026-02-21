@@ -35,7 +35,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
               <div className="w-10 h-10 bg-[#4a8067] dark:bg-[#6ccca2] rounded-xl flex items-center justify-center text-white dark:text-[#1a1c1a] font-bold text-sm shadow-sm group-hover:scale-105 transition-transform">
                 SC
               </div>
-              <span className="font-bold text-stone-800 dark:text-white text-xl hidden md:block tracking-tight">Student Counseling</span>
+              <span className="font-bold text-stone-800 dark:text-white text-xl hidden md:block tracking-tight">Student Counselling</span>
             </div>
 
             <div className="hidden md:flex items-center space-x-2 bg-stone-100 dark:bg-[#252525] p-1 rounded-full border border-stone-200/50 dark:border-stone-800/50 shadow-inner">

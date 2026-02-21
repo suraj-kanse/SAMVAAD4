@@ -40,7 +40,7 @@ export interface Session {
 }
 
 // --- Auth Types ---
-export type UserRole = 'admin' | 'counselor';
+export type UserRole = 'admin' | 'counsellor';
 export type UserStatus = 'pending' | 'approved' | 'blocked';
 
 export interface AuthUser {
@@ -51,7 +51,7 @@ export interface AuthUser {
   status: UserStatus;
 }
 
-export interface Counselor {
+export interface Counsellor {
   id: string;
   email: string;
   name: string;

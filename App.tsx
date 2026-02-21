@@ -5,7 +5,7 @@ import { ActionCenter } from './components/dashboard/ActionCenter';
 import { StudentRepository } from './components/dashboard/StudentRepository';
 import { StudentDetail } from './components/dashboard/StudentDetail';
 import { AboutPage } from './components/AboutPage';
-import { CounselorPage } from './components/CounselorPage';
+import { CounsellorPage } from './components/CounsellorPage';
 import { LoginPage } from './components/LoginPage';
 import { RegisterPage } from './components/RegisterPage';
 import { PendingApproval } from './components/PendingApproval';
@@ -16,20 +16,20 @@ import { AuthUser } from './types';
 type ViewState =
   | 'landing'
   | 'about'
-  | 'counselor'
-  | 'counselor-login'
-  | 'counselor-register'
-  | 'counselor-dashboard'
+  | 'counsellor'
+  | 'counsellor-login'
+  | 'counsellor-register'
+  | 'counsellor-dashboard'
   | 'admin-login'
   | 'admin-dashboard';
 
 type Theme = 'light' | 'dark';
 
 function App() {
-  // Read initial view from URL hash (e.g. #counselor-login, #admin-login)
+  // Read initial view from URL hash (e.g. #counsellor-login, #admin-login)
   const getViewFromHash = (): ViewState => {
     const hash = window.location.hash.replace('#', '');
-    const validViews: ViewState[] = ['counselor-login', 'counselor-register', 'admin-login'];
+    const validViews: ViewState[] = ['counsellor-login', 'counsellor-register', 'admin-login'];
     if (validViews.includes(hash as ViewState)) return hash as ViewState;
     return 'landing';
   };
@@ -62,7 +62,7 @@ function App() {
   // Sync view with URL hash
   useEffect(() => {
     // Update hash when view changes
-    const authViews = ['counselor-login', 'counselor-register', 'admin-login'];
+    const authViews = ['counsellor-login', 'counsellor-register', 'admin-login'];
     if (authViews.includes(view)) {
       window.location.hash = view;
     } else {
@@ -104,12 +104,12 @@ function App() {
         // Auto-navigate to appropriate dashboard
         if (user.role === 'admin') {
           setView('admin-dashboard');
-        } else if (user.role === 'counselor') {
+        } else if (user.role === 'counsellor') {
           if (user.status === 'approved') {
-            setView('counselor-dashboard');
+            setView('counsellor-dashboard');
           } else {
             // pending or blocked — handled in render
-            setView('counselor-dashboard');
+            setView('counsellor-dashboard');
           }
         }
       } catch {
@@ -141,11 +141,11 @@ function App() {
     setAuthUser(user);
     if (user.role === 'admin') {
       setView('admin-dashboard');
-    } else if (user.role === 'counselor') {
+    } else if (user.role === 'counsellor') {
       if (user.status === 'approved') {
-        setView('counselor-dashboard');
+        setView('counsellor-dashboard');
       } else {
-        setView('counselor-dashboard'); // will show PendingApproval
+        setView('counsellor-dashboard'); // will show PendingApproval
       }
     }
   };
@@ -171,7 +171,7 @@ function App() {
       {view === 'landing' && (
         <LandingPage
           onAboutClick={() => setView('about')}
-          onMeetCounselorClick={() => setView('counselor')}
+          onMeetCounsellorClick={() => setView('counsellor')}
           isDark={theme === 'dark'}
           onThemeToggle={toggleTheme}
         />
@@ -180,14 +180,14 @@ function App() {
       {view === 'about' && (
         <AboutPage
           onHomeClick={() => setView('landing')}
-          onMeetCounselorClick={() => setView('counselor')}
+          onMeetCounsellorClick={() => setView('counsellor')}
           isDark={theme === 'dark'}
           onThemeToggle={toggleTheme}
         />
       )}
 
-      {view === 'counselor' && (
-        <CounselorPage
+      {view === 'counsellor' && (
+        <CounsellorPage
           onHomeClick={() => setView('landing')}
           onAboutClick={() => setView('about')}
           isDark={theme === 'dark'}
@@ -196,20 +196,20 @@ function App() {
       )}
 
       {/* Auth Pages */}
-      {view === 'counselor-login' && (
+      {view === 'counsellor-login' && (
         <LoginPage
-          role="counselor"
+          role="counsellor"
           onLoginSuccess={handleLoginSuccess}
           onBack={() => setView('landing')}
-          onRegisterClick={() => setView('counselor-register')}
+          onRegisterClick={() => setView('counsellor-register')}
           isDark={theme === 'dark'}
         />
       )}
 
-      {view === 'counselor-register' && (
+      {view === 'counsellor-register' && (
         <RegisterPage
           onBack={() => setView('landing')}
-          onLoginClick={() => setView('counselor-login')}
+          onLoginClick={() => setView('counsellor-login')}
           isDark={theme === 'dark'}
         />
       )}
@@ -223,8 +223,8 @@ function App() {
         />
       )}
 
-      {/* Counselor Dashboard (with auth guard) */}
-      {view === 'counselor-dashboard' && authUser?.role === 'counselor' && (
+      {/* Counsellor Dashboard (with auth guard) */}
+      {view === 'counsellor-dashboard' && authUser?.role === 'counsellor' && (
         <>
           {authUser.status !== 'approved' ? (
             <PendingApproval
